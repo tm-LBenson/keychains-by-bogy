@@ -1,65 +1,107 @@
-import { useState } from "react";
-import logo from "/logo.webp"; // Adjust the path accordingly
-import Cart from "./Cart"; // Make sure the path matches
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import logo from "/logo.webp"; // Ensure the correct path to your logo
+import Cart from "./Cart";
 
-const Navbar = () => {
+const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const toggleCart = () => {
+    setCartOpen(!cartOpen);
+  };
 
   return (
-    <nav className="bg-pink-500 p-4 text-white">
-      <div className="container mx-auto flex justify-between items-center">
-        <div className="relative h-[76px] w-[300px]">
-          <div className='absolute top-[-13px]'>
-            <a
-              href="/"
-              className="flex items-center h-full"
+    <div className="flex bg-pink-500 shadow-lg h-full py-4 px-4 sm:px-10  font-[sans-serif] min-h-[70px] tracking-wide relative z-50">
+      <div className="flex flex-wrap items-center justify-between gap-4 w-full">
+        <Link
+          to="/"
+          className="flex items-center"
+        >
+          <div className="w-[75px]">
+            <img
+              src={logo}
+              alt="KeyChains By Bogy Logo"
+              className="object-cover"
+            />
+          </div>
+          <span className="font-bold text-black pl-3 text-lg hidden lg:block">
+            KeyChains By Bogy
+          </span>
+        </Link>
+
+        <div
+          className={`flex items-start ${
+            isOpen ? "flex" : "hidden"
+          } fixed inset-0 bg-white p-6 lg:p-0 lg:static lg:flex lg:bg-transparent z-50`}
+        >
+          {!cartOpen && (
+            <button
+              onClick={toggleMenu}
+              className="lg:hidden absolute top-4 right-4 z-[100] rounded-full bg-white p-3"
             >
-              <img
-                src={logo}
-                alt="KeyChains By Bogy Logo"
-                className="mr-3 object-contain h-[100px] w-[90px]"
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 fill-black"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </button>
+          )}
+          <div className="lg:flex lg:items-center lg:w-auto w-full lg:bg-transparent bg-pink-500 lg:p-0 p-8">
+            <Link
+              to="/#products"
+              className="block lg:inline-block text-black px-3 py-2 rounded text-lg font-medium"
+              onClick={toggleMenu}
+            >
+              Products
+            </Link>
+            <Link
+              to="/about"
+              className="block lg:inline-block text-black px-3 py-2 rounded text-lg font-medium"
+              onClick={toggleMenu}
+            >
+              About Us
+            </Link>
+            <Link
+              to="/contact"
+              className="block lg:inline-block text-black px-3 py-2 rounded text-lg font-medium"
+              onClick={toggleMenu}
+            >
+              Contact
+            </Link>
+            <span className="text-black">
+              <Cart
+                setToggleCart={toggleCart}
+                cartOpen={cartOpen}
               />
-              <div className="font-bold text-lg">KeyChains By Bogy</div>
-            </a>
+            </span>
           </div>
         </div>
 
-        <div className={`md:flex items-center ${isOpen ? "block" : "hidden"}`}>
-          <a
-            href="#products"
-            className="text-white px-3 py-2 rounded-md text-lg font-medium"
-          >
-            Products
-          </a>
-          <a
-            href="/about"
-            className="text-white px-3 py-2 rounded-md text-lg font-medium"
-          >
-            About Us
-          </a>
-          <a
-            href="/contact"
-            className="text-white px-3 py-2 rounded-md text-lg font-medium"
-          >
-            Contact
-          </a>
-          <Cart />
-        </div>
-
         <button
-          className="md:hidden flex items-center px-3 py-2 border rounded text-white border-white"
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={toggleMenu}
+          className="lg:hidden flex items-center px-3 py-2"
         >
           <svg
-            className="fill-current h-3 w-3"
+            className="w-6 h-6 fill-current text-black"
             viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            <title>Menu</title>
             <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
           </svg>
         </button>
       </div>
-    </nav>
+    </div>
   );
 };
 

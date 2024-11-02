@@ -1,21 +1,25 @@
 import { useState } from "react";
+import { useCart } from "./CartContext";
 
-const Cart = () => {
+interface CartProps {
+  cartOpen: boolean;
+  setToggleCart: () => void;
+}
+
+const Cart: React.FC<CartProps> = ({ setToggleCart, cartOpen }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [items, setItems] = useState([
-    { id: 1, name: "KeyChain Model A", quantity: 2, price: 15.99 },
-    { id: 2, name: "KeyChain Model B", quantity: 1, price: 9.99 },
-  ]);
-  console.log(setItems);
-  //TODO Added log to use variable
-  // Toggle cart dropdown
+  const { items } = useCart();
+
   const toggleCart = () => setIsOpen(!isOpen);
 
   return (
-    <div className="relative">
+    <>
       <button
-        onClick={toggleCart}
-        className="text-white focus:outline-none"
+        onClick={() => {
+          toggleCart();
+          setToggleCart();
+        }}
+        className="relative z-20"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -31,25 +35,55 @@ const Cart = () => {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50">
-          <ul>
-            {items.map((item) => (
-              <li
-                key={item.id}
-                className="p-2 hover:bg-gray-100"
-              >
-                {item.name} - {item.quantity} x ${item.price.toFixed(2)}
-              </li>
-            ))}
-          </ul>
-          <div className="p-2">
-            <button className="px-4 py-2 bg-pink-500 text-white rounded hover:bg-pink-600">
-              Checkout
-            </button>
+        <div className="fixed inset-0 w-full h-full bg-black bg-opacity-50 z-50 flex justify-end">
+          <div className="bg-white w-full max-w-md h-full overflow-auto">
+            <div className="flex justify-between items-center p-4 border-b">
+              <h3 className="text-xl font-bold">Shopping Cart</h3>
+              {cartOpen && (
+                <button
+                  onClick={() => {
+                    toggleCart();
+                    setToggleCart();
+                  }}
+                  className="text-gray-400 z-[] hover:text-red-500"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 fill-black"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                </button>
+              )}
+            </div>
+            <ul className="divide-y">
+              {items.map((item) => (
+                <li
+                  key={item.id}
+                  className="flex justify-between items-center p-4"
+                >
+                  <div>
+                    <p className="font-bold">{item.name}</p>
+                    <p>Qty: {item.quantity}</p>
+                  </div>
+                  <span>${(item.price * item.quantity).toFixed(2)}</span>
+                </li>
+              ))}
+            </ul>
+            <div className="p-4">
+              <button className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded">
+                Checkout
+              </button>
+            </div>
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 

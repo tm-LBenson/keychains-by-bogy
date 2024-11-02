@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { db } from "./firestore";
 import { collection, getDocs } from "firebase/firestore";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 export interface Product {
   id: string;
@@ -38,32 +38,42 @@ const Products: React.FC = () => {
     <div className="font-[sans-serif] py-4 mx-auto lg:max-w-6xl max-w-lg md:max-w-full">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {products.map((product) => (
-        <Link to={`/product/${product.id}`} key={product.id} className="bg-gray-200 rounded-xl cursor-pointer hover:scale-[1.03] transition-all relative overflow-hidden">
-
-            <div className="p-6">
-              <div className="w-2/3 h-[220px] overflow-hidden mx-auto aspect-w-16 aspect-h-8">
-                <img
-                  src={product.imageUrl}
-                  alt={product.name}
-                  className="h-full w-full object-contain"
-                />
+          <>
+            <div className="relative bg-pink-200 rounded-2xl shadow-lg">
+              <Link
+                to={`/product/${product.id}`}
+                key={product.id}
+                className="bg-gray-200 rounded-xl cursor-pointer hover:scale-[1.03] transition-all relative overflow-hidden"
+              >
+                <div className="p-6">
+                  <div className="w-2/3 h-[220px] overflow-hidden mx-auto aspect-w-16 aspect-h-8">
+                    <img
+                      src={product.imageUrl}
+                      alt={product.name}
+                      className="h-full w-full object-contain"
+                    />
+                  </div>
+                </div>
+                <div className="text-center p-6">
+                  <h3 className="text-lg font-bold text-gray-800">
+                    {product.name}
+                  </h3>
+                  <h4 className="text-lg text-gray-800 font-bold mt-6">
+                    ${product.price} ${product.originalPrice}
+                  </h4>
+                </div>
+              </Link>
+              <div className="h-[50px] pt-5"></div>
+              <div className="relative w-[75%] m-auto">
+                <button
+                  type="button"
+                  className="w-full flex absolute bottom-[22px] items-center justify-center bg-pink-600 text-white font-bold py-2 px-4 rounded-full shadow-lg hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-opacity-50 transition duration-300 ease-in-out mt-4 mb-4l"
+                >
+                  Add to cart
+                </button>
               </div>
             </div>
-            <div className="text-center bg-gray-100 p-6">
-              <h3 className="text-lg font-bold text-gray-800">
-                {product.name}
-              </h3>
-              <h4 className="text-lg text-gray-800 font-bold mt-6">
-                ${product.price} ${product.originalPrice}
-              </h4>
-              <button
-                type="button"
-                className="w-full flex items-center justify-center gap-3 mt-6 px-6 py-3 bg-pink-400 text-base text-gray-800 font-semibold rounded-xl"
-              >
-                Add to cart
-              </button>
-            </div>
-          </Link>
+          </>
         ))}
       </div>
     </div>
