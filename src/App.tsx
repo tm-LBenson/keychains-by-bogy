@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Navbar from "./NavBar";
 import { HeroCarousel } from "./HeroCarousel";
@@ -14,7 +14,6 @@ function App() {
           path="/"
           element={
             <>
-
               <HeroCarousel />
               <h2 className="text-4xl mt-20 text-black mx-10">
                 See our line of products.
@@ -34,7 +33,6 @@ function App() {
           element={
             <>
               <main>
-
                 <ProductDetail />
               </main>
             </>
