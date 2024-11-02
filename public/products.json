@@ -1,0 +1,31 @@
+{
+  "products": [
+    {
+      "id": "1",
+      "name": "Safety Charm Keychain",
+      "description": "A compact and stylish keychain featuring essential self-defense tools including a whistle, pepper spray, and a personal alarm.",
+      "price": "25.99",
+      "imageUrl": "/keys.jpg",
+      "category": "Safety Keychains",
+      "onSale": true
+    },
+    {
+      "id": "2",
+      "name": "Bling Stunner",
+      "description": "Make a statement with this high-voltage stun gun disguised as a glittering accessory for your purse or belt.",
+      "price": "10.00",
+      "imageUrl": "/tazer-diamond.jpg",
+      "category": "Stun Guns",
+      "onSale": false
+    },
+    {
+      "id": "3",
+      "name": "Trump Crew Neck",
+      "description": "Show your support with this bold and humorous crew neck, featuring an eye-catching political statement.",
+      "price": "20.00",
+      "imageUrl": "/trumpcrew.jpg",
+      "category": "Apparel",
+      "onSale": true
+    }
+  ]
+}
