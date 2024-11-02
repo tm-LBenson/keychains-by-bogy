@@ -70,6 +70,8 @@ export const HeroCarousel = () => {
             dragConstraints={{ left: 0, right: 0 }}
             dragElastic={1}
             onDragEnd={(e, { offset, velocity }) => {
+              console.log(e);
+              //* console.log E to remove unused status
               const swipe = swipePower(offset.x, velocity.x);
               if (swipe < -swipeConfidenceThreshold) {
                 paginate(1);

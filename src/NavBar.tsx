@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import logo from "/logo.webp"; // Adjust the path accordingly
 import Cart from "./Cart"; // Make sure the path matches
 

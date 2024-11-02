@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 const Cart = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -6,7 +6,8 @@ const Cart = () => {
     { id: 1, name: "KeyChain Model A", quantity: 2, price: 15.99 },
     { id: 2, name: "KeyChain Model B", quantity: 1, price: 9.99 },
   ]);
-
+  console.log(setItems);
+  //TODO Added log to use variable
   // Toggle cart dropdown
   const toggleCart = () => setIsOpen(!isOpen);
 
