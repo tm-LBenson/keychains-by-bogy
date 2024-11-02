@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { db } from "./firestore";
 import { collection, getDocs } from "firebase/firestore";
+import { Link } from 'react-router-dom';
 
 export interface Product {
   id: string;
@@ -37,10 +38,8 @@ const Products: React.FC = () => {
     <div className="font-[sans-serif] py-4 mx-auto lg:max-w-6xl max-w-lg md:max-w-full">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {products.map((product) => (
-          <div
-            key={product.id}
-            className="bg-gray-200 rounded-xl cursor-pointer hover:scale-[1.03] transition-all relative overflow-hidden"
-          >
+        <Link to={`/product/${product.id}`} key={product.id} className="bg-gray-200 rounded-xl cursor-pointer hover:scale-[1.03] transition-all relative overflow-hidden">
+
             <div className="p-6">
               <div className="w-2/3 h-[220px] overflow-hidden mx-auto aspect-w-16 aspect-h-8">
                 <img
@@ -59,12 +58,12 @@ const Products: React.FC = () => {
               </h4>
               <button
                 type="button"
-                className="w-full flex items-center justify-center gap-3 mt-6 px-6 py-3 bg-yellow-400 text-base text-gray-800 font-semibold rounded-xl"
+                className="w-full flex items-center justify-center gap-3 mt-6 px-6 py-3 bg-pink-400 text-base text-gray-800 font-semibold rounded-xl"
               >
                 Add to cart
               </button>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

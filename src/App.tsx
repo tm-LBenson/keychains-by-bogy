@@ -1,25 +1,52 @@
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import "./App.css";
-
-import { HeroCarousel } from "./HeroCarousel";
 import Navbar from "./NavBar";
-
+import { HeroCarousel } from "./HeroCarousel";
 import Products from "./Products";
+import ProductDetail from "./ProductDetail"; // Import the ProductDetail component
 
 function App() {
   return (
-    <>
+    <Router>
       <Navbar />
-      <HeroCarousel />
-      <h2
-        id="products"
-        className="text-4xl mt-20 text-black mx-10"
-      >
-        See our line of products.
-      </h2>
-      <main className="flex flex-col items-center min-h-screen p-4">
-        <Products />
-      </main>
-    </>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <>
+
+              <HeroCarousel />
+              <h2 className="text-4xl mt-20 text-black mx-10">
+                See our line of products.
+              </h2>
+              <main
+                id="products"
+                className="flex flex-col items-center min-h-screen p-4"
+              >
+                <Products />
+              </main>
+            </>
+          }
+        />
+
+        <Route
+          path="/product/:id"
+          element={
+            <>
+              <main>
+                <Link
+                  className="text-black"
+                  to={"/#products"}
+                >
+                  Back
+                </Link>
+                <ProductDetail />
+              </main>
+            </>
+          }
+        />
+      </Routes>
+    </Router>
   );
 }
 

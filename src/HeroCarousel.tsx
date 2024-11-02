@@ -2,10 +2,12 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Header from "./Header";
+import useScrollToHash from "./useScrollToHash";
 
 const images = ["/3-keys1.jpg", "/3-keys2.jpg", "/3-keys3.jpg"];
 
 export const HeroCarousel = () => {
+  useScrollToHash();
   const settings = {
     dots: true,
     infinite: true,
