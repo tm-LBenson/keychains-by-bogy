@@ -34,12 +34,7 @@ function App() {
           element={
             <>
               <main>
-                <Link
-                  className="text-black"
-                  to={"/#products"}
-                >
-                  Back
-                </Link>
+
                 <ProductDetail />
               </main>
             </>
