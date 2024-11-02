@@ -4,6 +4,7 @@ import { HeroCarousel } from "./HeroCarousel";
 import Navbar from "./NavBar";
 
 import Products from "./Products";
+import SeedFirestore from "./SeedFirestore";
 
 function App() {
   return (
