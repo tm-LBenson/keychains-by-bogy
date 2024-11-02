@@ -18,8 +18,8 @@ const Products: React.FC = () => {
     const fetchProducts = async () => {
       const querySnapshot = await getDocs(collection(db, "products"));
       const productsArray = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
         ...(doc.data() as Product),
+        id: doc.id,
       }));
       setProducts(productsArray);
     };
@@ -28,7 +28,7 @@ const Products: React.FC = () => {
   }, []);
 
   return (
-    <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
       {products.map((product) => (
         <div
           key={product.id}
