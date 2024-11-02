@@ -16,7 +16,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <div className="flex bg-pink-500 shadow-lg h-full py-4 px-4 sm:px-10  font-[sans-serif] min-h-[70px] tracking-wide relative z-50">
+    <div className="flex bg-pink-500 shadow-lg py-4 px-4 sm:px-10  font-[sans-serif] min-h-[70px] tracking-wide relative z-50">
       <div className="flex flex-wrap items-center justify-between gap-4 w-full">
         <Link
           to="/"
@@ -35,9 +35,9 @@ const Navbar: React.FC = () => {
         </Link>
 
         <div
-          className={`flex items-start ${
+          className={`flex items-start justify-end ${
             isOpen ? "flex" : "hidden"
-          } fixed inset-0 bg-white p-6 lg:p-0 lg:static lg:flex lg:bg-transparent z-50`}
+          } fixed inset-0  p-6 lg:p-0 lg:static lg:flex lg:bg-transparent z-50`}
         >
           {!cartOpen && (
             <button
@@ -57,7 +57,7 @@ const Navbar: React.FC = () => {
               </svg>
             </button>
           )}
-          <div className="lg:flex lg:items-center lg:w-auto w-full lg:bg-transparent bg-pink-500 lg:p-0 p-8">
+          <div className="lg:flex lg:items-center lg:w-auto w-full md:w-[50%] h-full lg:bg-transparent bg-pink-500 lg:p-0 p-8">
             <Link
               to="/#products"
               className="block lg:inline-block text-black px-3 py-2 rounded text-lg font-medium"

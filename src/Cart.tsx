@@ -71,7 +71,7 @@ const Cart: React.FC<CartProps> = ({ setToggleCart, cartOpen }) => {
                     <p className="font-bold">{item.name}</p>
                     <p>Qty: {item.quantity}</p>
                   </div>
-                  <span>${(item.price * item.quantity).toFixed(2)}</span>
+                  <span>${(+item.price * item.quantity).toFixed(2)}</span>
                 </li>
               ))}
             </ul>

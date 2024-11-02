@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { db } from "./firestore";
 import { collection, getDocs } from "firebase/firestore";
 import { Link } from "react-router-dom";
+import { useCart } from "./CartContext";
 
 export interface Product {
   id: string;
@@ -15,7 +16,7 @@ export interface Product {
 const Products: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-
+  const { addItem } = useCart();
   useEffect(() => {
     const fetchProducts = async () => {
       const querySnapshot = await getDocs(collection(db, "products"));
@@ -66,6 +67,7 @@ const Products: React.FC = () => {
               <div className="h-[50px] pt-5"></div>
               <div className="relative w-[75%] m-auto">
                 <button
+                  onClick={() => addItem({ ...product, quantity: 1 })}
                   type="button"
                   className="w-full flex absolute bottom-[22px] items-center justify-center bg-pink-600 text-white font-bold py-2 px-4 rounded-full shadow-lg hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-opacity-50 transition duration-300 ease-in-out mt-4 mb-4l"
                 >
