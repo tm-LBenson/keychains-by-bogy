@@ -1,6 +1,6 @@
 export default function Header() {
   return (
-    <header>
+    <div className='flex flex-col items-center'>
       <h1 className="text-5xl text-pink-100 font-bold mb-4">
         KeyChains By Bogy
       </h1>
@@ -12,6 +12,6 @@ export default function Header() {
           Products
         </button>
       </a>
-    </header>
+    </div>
   );
 }

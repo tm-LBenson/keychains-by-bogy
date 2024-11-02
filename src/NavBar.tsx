@@ -8,17 +8,21 @@ const Navbar = () => {
   return (
     <nav className="bg-pink-500 p-4 text-white">
       <div className="container mx-auto flex justify-between items-center">
-        <a
-          href="/"
-          className="flex items-center"
-        >
-          <img
-            src={logo}
-            alt="KeyChains By Bogy Logo"
-            className="h-8 mr-3 img"
-          />
-          <span className="font-bold text-lg">KeyChains By Bogy</span>
-        </a>
+        <div className="relative h-[76px] w-[300px]">
+          <div className='absolute top-[-13px]'>
+            <a
+              href="/"
+              className="flex items-center h-full"
+            >
+              <img
+                src={logo}
+                alt="KeyChains By Bogy Logo"
+                className="mr-3 object-contain h-[100px] w-[90px]"
+              />
+              <div className="font-bold text-lg">KeyChains By Bogy</div>
+            </a>
+          </div>
+        </div>
 
         <div className={`md:flex items-center ${isOpen ? "block" : "hidden"}`}>
           <a

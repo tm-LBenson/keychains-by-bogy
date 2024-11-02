@@ -1,5 +1,5 @@
 import "./App.css";
-import Header from "./Header";
+
 import { HeroCarousel } from "./HeroCarousel";
 import Navbar from "./NavBar";
 
@@ -10,7 +10,6 @@ function App() {
     <>
       <Navbar />
       <HeroCarousel />
-      <Header />
       <h2
         id="products"
         className="text-4xl mt-20 text-black mx-10"
