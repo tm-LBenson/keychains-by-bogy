@@ -13,7 +13,7 @@ function App() {
       <Header />
       <h2
         id="products"
-        className="text-4xl mt-20 text-black"
+        className="text-4xl mt-20 text-black mx-10"
       >
         See our line of products.
       </h2>

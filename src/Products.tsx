@@ -32,7 +32,7 @@ const Products: React.FC = () => {
       {products.map((product) => (
         <div
           key={product.id}
-          className="bg-white rounded-lg p-4 shadow-lg"
+          className="bg-white rounded-lg p-4 shadow-lg max-w-[600px]"
         >
           <img
             src={product.imageUrl}
