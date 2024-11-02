@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { db } from "./firestore";
-import { collection, doc, setDoc } from "firebase/firestore";
-import { Product } from './Products';
+import { doc, setDoc } from "firebase/firestore";
+import { Product } from "./Products";
 
 const SeedFirestore = () => {
   const [status, setStatus] = useState("Ready to seed");
