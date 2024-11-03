@@ -42,33 +42,33 @@ const Products: React.FC = () => {
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {products.map((product) => (
-          <>
-            <div className="relative bg-pink-200 rounded-2xl shadow-lg">
-              <Link
-                to={`/product/${product.id}`}
-                key={product.id}
-                className="bg-gray-200 rounded-xl cursor-pointer hover:scale-[1.03] transition-all relative overflow-hidden"
-              >
-                <div className="p-6">
-                  <div className="w-2/3 h-[220px] overflow-hidden mx-auto aspect-w-16 aspect-h-8">
-                    <img
-                      src={product.imageUrls[0]}
-                      alt={product.name}
-                      className="h-full w-full object-contain"
-                    />
-                  </div>
+          <div
+            key={product.id}
+            className="relative bg-pink-200 rounded-2xl shadow-lg"
+          >
+            <Link
+              to={`/product/${product.id}`}
+              className="bg-gray-200 rounded-xl cursor-pointer hover:scale-[1.03] transition-all relative overflow-hidden"
+            >
+              <div className="p-6">
+                <div className="w-2/3 h-[220px] overflow-hidden mx-auto aspect-w-16 aspect-h-8">
+                  <img
+                    src={product.imageUrls[0]}
+                    alt={product.name}
+                    className="h-full w-full object-contain"
+                  />
                 </div>
-                <div className="text-center p-6">
-                  <h3 className="text-lg font-bold text-gray-800">
-                    {product.name}
-                  </h3>
-                  <h4 className="text-lg text-gray-800 font-bold mt-6">
-                    ${product.price} ${product.originalPrice}
-                  </h4>
-                </div>
-              </Link>
-            </div>
-          </>
+              </div>
+              <div className="text-center p-6">
+                <h3 className="text-lg font-bold text-gray-800">
+                  {product.name}
+                </h3>
+                <h4 className="text-lg text-gray-800 font-bold mt-6">
+                  ${product.price} ${product.originalPrice}
+                </h4>
+              </div>
+            </Link>
+          </div>
         ))}
       </div>
     </div>
