@@ -9,6 +9,7 @@ export interface Product {
   description: string;
   imageUrl: string;
   price: string;
+  onHand: number;
   originalPrice?: string;
 }
 
@@ -36,6 +37,9 @@ const Products: React.FC = () => {
 
   return (
     <div className="font-[sans-serif] py-4 mx-auto lg:max-w-6xl max-w-lg md:max-w-full">
+      <h2 className="text-4xl  mt-20 text-black mb-10">
+        See our line of products.
+      </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {products.map((product) => (
           <>

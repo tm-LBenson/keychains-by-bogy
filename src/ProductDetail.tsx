@@ -13,6 +13,7 @@ const ProductDetail: React.FC = () => {
     description: "",
     imageUrl: "",
     price: "",
+    onHand: 0,
   });
   const { id } = useParams<{ id: string }>();
   const { addItem } = useCart();

@@ -17,13 +17,11 @@ function App() {
             element={
               <>
                 <HeroCarousel />
-                <h2 className="text-4xl mt-20 text-black mx-10">
-                  See our line of products.
-                </h2>
                 <main
                   id="products"
                   className="flex flex-col items-center min-h-screen p-4"
                 >
+
                   <Products />
                 </main>
               </>
