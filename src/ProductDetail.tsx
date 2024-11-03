@@ -4,12 +4,14 @@ import { db } from "./firestore";
 import { doc, getDoc } from "firebase/firestore";
 import { Product } from "./Products";
 import { useCart } from "./CartContext";
+import AddedToCart from "./AddedToCart";
 
 const ProductDetail: React.FC = () => {
   const [product, setProduct] = useState<Product | null>(null);
   const { id } = useParams<{ id: string }>();
   const { addItem } = useCart();
   const [quantity, setQuantity] = useState(1);
+  const [showAddedToCart, setShowAddedToCart] = useState(false);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -25,7 +27,13 @@ const ProductDetail: React.FC = () => {
 
     fetchProduct();
   }, [id]);
-
+  const addToCart = () => {
+    addItem({ ...product, quantity });
+    setShowAddedToCart(true);
+    setTimeout(() => {
+      setShowAddedToCart(false);
+    }, 1400);
+  };
   const increaseQuantity = () => {
     setQuantity((prev) => prev + 1);
   };
@@ -113,10 +121,16 @@ const ProductDetail: React.FC = () => {
               </button>
             </div>
             <button
-              onClick={() => addItem({ ...product, quantity })}
+              onClick={addToCart}
               type="button"
-              className="w-full mt-8 px-6 py-3 bg-pink-600 hover:bg-pink-700 text-white text-sm font-semibold rounded-md"
+              className="w-full mt-8 px-6 py-3 relative bg-pink-600 hover:bg-pink-700 text-white text-sm font-semibold rounded-md"
             >
+            <div className="absolute right-0 bottom-11">
+              <AddedToCart
+                message="Added to cart."
+                isVisible={showAddedToCart}
+              />
+            </div>
               Add to cart
             </button>
             <div className="mt-8">
