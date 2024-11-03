@@ -17,20 +17,21 @@ const Navbar: React.FC = () => {
 
   return (
     <>
-      <div className="flex bg-pink-500 shadow-lg w-full top-0 py-4 px-4 sm:px-10  font-[sans-serif] min-h-[70px] tracking-wide  z-50">
+      <div className="flex bg-pink-500 shadow-lg  w-full py-4 px-4 sm:px-10  font-[sans-serif] min-h-[80px] tracking-wide  z-50"></div>
+      <div className="flex bg-pink-500 shadow-lg fixed w-full top-0 py-4 px-4 sm:px-10  font-[sans-serif] min-h-[70px] tracking-wide  z-50">
         <div className="flex flex-wrap items-center justify-between gap-4 w-full">
           <Link
             to="/"
             className="flex items-center"
           >
-            <div className="w-[75px]">
+            <div className="w-[100px] top-0 bottom-0 absolute left-2 h-[70px] overflow-hidden">
               <img
                 src={logo}
                 alt="KeyChains By Bogy Logo"
-                className="object-cover"
+                className="object-cover w-full h-full scale-150"
               />
             </div>
-            <span className="font-bold text-black pl-3 text-lg hidden lg:block">
+            <span className="font-bold ml-16 text-black pl-3 text-lg hidden lg:block">
               KeyChains By Bogy
             </span>
           </Link>

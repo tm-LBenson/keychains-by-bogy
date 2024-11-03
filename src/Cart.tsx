@@ -36,6 +36,7 @@ const Cart: React.FC<CartProps> = ({ setToggleCart, cartOpen }) => {
 
   return (
     <>
+      {/* Cart Icon */}
       <button
         onClick={toggleCart}
         className="relative z-20"
