@@ -10,17 +10,23 @@ const Cart: React.FC<CartProps> = ({ setToggleCart, cartOpen }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { items } = useCart();
 
-  const toggleCart = () => setIsOpen(!isOpen);
+  const toggleCart = () => {
+    setIsOpen(!isOpen);
+    setToggleCart();
+  };
+
+  // Calculate total number of items in the cart
+  const totalItems = items.reduce((total, item) => total + item.quantity, 0);
 
   return (
     <>
       <button
-        onClick={() => {
-          toggleCart();
-          setToggleCart();
-        }}
+        onClick={toggleCart}
         className="relative z-20"
       >
+        <span className="absolute bottom-4 left-4 inline-flex items-center justify-center p-1 bg-red-500 rounded-full text-white text-xs min-w-6 h-6 leading-none">
+          {totalItems}
+        </span>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width={30}
@@ -41,10 +47,7 @@ const Cart: React.FC<CartProps> = ({ setToggleCart, cartOpen }) => {
               <h3 className="text-xl font-bold">Shopping Cart</h3>
               {cartOpen && (
                 <button
-                  onClick={() => {
-                    toggleCart();
-                    setToggleCart();
-                  }}
+                  onClick={toggleCart}
                   className="text-gray-400 z-[] hover:text-red-500"
                 >
                   <svg

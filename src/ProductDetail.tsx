@@ -3,10 +3,13 @@ import { Link, useParams } from "react-router-dom";
 import { db } from "./firestore";
 import { doc, getDoc } from "firebase/firestore";
 import { Product } from "./Products";
+import { useCart } from "./CartContext";
 
 const ProductDetail: React.FC = () => {
   const [product, setProduct] = useState<Product | null>(null);
   const { id } = useParams<{ id: string }>();
+  const { addItem } = useCart();
+  const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -22,6 +25,19 @@ const ProductDetail: React.FC = () => {
 
     fetchProduct();
   }, [id]);
+
+  const increaseQuantity = () => {
+    setQuantity((prev) => prev + 1);
+  };
+
+  const decreaseQuantity = () => {
+    setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
+  };
+
+  const handleInputChange = (e: { target: { value: string } }) => {
+    const value = parseInt(e.target.value, 10);
+    setQuantity(value >= 1 ? value : 1);
+  };
 
   if (!product) {
     return <div>Loading...</div>;
@@ -51,7 +67,6 @@ const ProductDetail: React.FC = () => {
           Back
         </Link>
         <div className="grid items-start grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12">
-          {/* Image Gallery */}
           <div className="w-full lg:sticky top-0 sm:flex gap-2">
             <img
               src={product.imageUrl}
@@ -59,8 +74,6 @@ const ProductDetail: React.FC = () => {
               className="w-full rounded-md object-cover"
             />
           </div>
-
-          {/* Product Details */}
           <div>
             <h2 className="text-2xl font-bold text-gray-800">{product.name}</h2>
             <div className="flex flex-wrap gap-4 mt-4">
@@ -73,15 +86,39 @@ const ProductDetail: React.FC = () => {
                 </p>
               )}
             </div>
-
-            {/* TODO: Add Dynamic options that are required on the original site*/}
+            <div className="flex items-center text-black space-x-2">
+              <button
+                onClick={decreaseQuantity}
+                className="px-3 py-1 text-xl font-semibold border border-gray-400 rounded"
+              >
+                -
+              </button>
+              <input
+                type="number"
+                value={quantity}
+                onChange={handleInputChange}
+                className="w-16 text-center text-xl border rounded"
+                min="1"
+                style={{
+                  MozAppearance: "textfield",
+                  WebkitAppearance: "none",
+                  appearance: "none",
+                }}
+              />
+              <button
+                onClick={increaseQuantity}
+                className="px-3 py-1 text-xl border-gray-400 font-semibold border rounded"
+              >
+                +
+              </button>
+            </div>
             <button
+              onClick={() => addItem({ ...product, quantity })}
               type="button"
               className="w-full mt-8 px-6 py-3 bg-pink-600 hover:bg-pink-700 text-white text-sm font-semibold rounded-md"
             >
               Add to cart
             </button>
-
             <div className="mt-8">
               <h3 className="text-xl font-bold text-gray-800">
                 About the item
