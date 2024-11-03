@@ -91,7 +91,7 @@ const Cart: React.FC<CartProps> = ({ setToggleCart, cartOpen }) => {
                 >
                   <div className="flex items-center space-x-4">
                     <img
-                      src={item.imageUrl}
+                      src={item.imageUrls[0]}
                       alt={item.name}
                       className="h-16 w-16 rounded"
                     />

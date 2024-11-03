@@ -11,7 +11,7 @@ const ProductDetail: React.FC = () => {
     id: "",
     name: "",
     description: "",
-    imageUrl: "",
+    imageUrls: [""],
     price: "",
     onHand: 0,
   });
@@ -84,7 +84,7 @@ const ProductDetail: React.FC = () => {
         <div className="grid items-start grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12">
           <div className="w-full lg:sticky top-0 sm:flex gap-2">
             <img
-              src={product.imageUrl}
+              src={product.imageUrls[0]}
               alt={product.name}
               className="w-full rounded-md object-cover"
             />

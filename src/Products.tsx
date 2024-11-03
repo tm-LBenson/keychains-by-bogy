@@ -7,7 +7,7 @@ export interface Product {
   id: string;
   name: string;
   description: string;
-  imageUrl: string;
+  imageUrls: string[];
   price: string;
   onHand: number;
   originalPrice?: string;
@@ -52,7 +52,7 @@ const Products: React.FC = () => {
                 <div className="p-6">
                   <div className="w-2/3 h-[220px] overflow-hidden mx-auto aspect-w-16 aspect-h-8">
                     <img
-                      src={product.imageUrl}
+                      src={product.imageUrls[0]}
                       alt={product.name}
                       className="h-full w-full object-contain"
                     />
