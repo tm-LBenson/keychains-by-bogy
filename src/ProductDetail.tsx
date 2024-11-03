@@ -7,7 +7,13 @@ import { useCart } from "./CartContext";
 import AddedToCart from "./AddedToCart";
 
 const ProductDetail: React.FC = () => {
-  const [product, setProduct] = useState<Product | null>(null);
+  const [product, setProduct] = useState<Product>({
+    id: "",
+    name: "",
+    description: "",
+    imageUrl: "",
+    price: "",
+  });
   const { id } = useParams<{ id: string }>();
   const { addItem } = useCart();
   const [quantity, setQuantity] = useState(1);
@@ -125,12 +131,12 @@ const ProductDetail: React.FC = () => {
               type="button"
               className="w-full mt-8 px-6 py-3 relative bg-pink-600 hover:bg-pink-700 text-white text-sm font-semibold rounded-md"
             >
-            <div className="absolute right-0 bottom-11">
-              <AddedToCart
-                message="Added to cart."
-                isVisible={showAddedToCart}
-              />
-            </div>
+              <div className="absolute right-0 bottom-11">
+                <AddedToCart
+                  message="Added to cart."
+                  isVisible={showAddedToCart}
+                />
+              </div>
               Add to cart
             </button>
             <div className="mt-8">
