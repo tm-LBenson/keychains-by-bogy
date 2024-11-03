@@ -8,15 +8,31 @@ interface CartProps {
 
 const Cart: React.FC<CartProps> = ({ setToggleCart, cartOpen }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { items } = useCart();
+  const { items, updateItemQuantity, removeItem } = useCart();
 
   const toggleCart = () => {
     setIsOpen(!isOpen);
     setToggleCart();
   };
 
-  // Calculate total number of items in the cart
   const totalItems = items.reduce((total, item) => total + item.quantity, 0);
+
+  const handleIncrease = (id: string) => {
+    updateItemQuantity(id, 1); // Assuming this method adjusts the quantity by given amount
+  };
+
+  const handleDecrease = (id: string) => {
+    updateItemQuantity(id, -1);
+  };
+
+  const handleInputChange = (id: string, value: string) => {
+    const quantity = parseInt(value, 10);
+    updateItemQuantity(id, quantity, true); // Assuming this method can set quantity directly if third param is true
+  };
+
+  const handleRemoveItem = (id: string) => {
+    removeItem(id);
+  };
 
   return (
     <>
@@ -24,9 +40,11 @@ const Cart: React.FC<CartProps> = ({ setToggleCart, cartOpen }) => {
         onClick={toggleCart}
         className="relative z-20"
       >
-        <span className="absolute bottom-4 left-4 inline-flex items-center justify-center p-1 bg-red-500 rounded-full text-white text-xs min-w-6 h-6 leading-none">
-          {totalItems}
-        </span>
+        {totalItems > 0 && (
+          <span className="absolute bottom-3 left-3 inline-flex items-center justify-center px-2 py-1 bg-red-500 rounded-full text-white text-xs">
+            {totalItems}
+          </span>
+        )}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width={30}
@@ -48,7 +66,7 @@ const Cart: React.FC<CartProps> = ({ setToggleCart, cartOpen }) => {
               {cartOpen && (
                 <button
                   onClick={toggleCart}
-                  className="text-gray-400 z-[] hover:text-red-500"
+                  className="text-gray-400 hover:text-red-500"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -70,10 +88,63 @@ const Cart: React.FC<CartProps> = ({ setToggleCart, cartOpen }) => {
                   key={item.id}
                   className="flex justify-between items-center p-4"
                 >
-                  <div>
-                    <p className="font-bold">{item.name}</p>
-                    <p>Qty: {item.quantity}</p>
+                  <div className="flex items-center space-x-4">
+                    <img
+                      src={item.imageUrl}
+                      alt={item.name}
+                      className="h-16 w-16 rounded"
+                    />
+                    <div>
+                      <p className="font-bold">{item.name}</p>
+                      <div className="flex items-center space-x-2">
+                        <button
+                          onClick={() => {
+                            handleDecrease(item.id);
+                            if (item.quantity === 1) {
+                              handleRemoveItem(item.id);
+                            }
+                          }}
+                          className="px-3 py-1 text-xl font-semibold border border-gray-400 rounded"
+                        >
+                          -
+                        </button>
+                        <input
+                          type="number"
+                          value={item.quantity}
+                          onChange={(e) =>
+                            handleInputChange(item.id, e.target.value)
+                          }
+                          className="w-16 text-center text-xl border rounded"
+                          min="0"
+                        />
+                        <button
+                          onClick={() => handleIncrease(item.id)}
+                          className="px-3 py-1 text-xl font-semibold border border-gray-400 rounded"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
                   </div>
+                  <button
+                    onClick={() => handleRemoveItem(item.id)}
+                    className="ml-4 text-gray-400 hover:text-red-500"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
                   <span>${(+item.price * item.quantity).toFixed(2)}</span>
                 </li>
               ))}
