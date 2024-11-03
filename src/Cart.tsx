@@ -35,14 +35,14 @@ const Cart: React.FC<CartProps> = ({ setToggleCart, cartOpen }) => {
   };
 
   return (
-    <>
+    <div className=''>
       {/* Cart Icon */}
       <button
         onClick={toggleCart}
         className="relative z-20"
       >
         {totalItems > 0 && (
-          <span className="absolute bottom-3 left-3 inline-flex items-center justify-center px-2 py-1 bg-red-500 rounded-full text-white text-xs">
+          <span className="absolute bottom-5 left-6 inline-flex items-center justify-center px-2 py-1 bg-red-500 rounded-full text-white text-xs">
             {totalItems}
           </span>
         )}
@@ -158,7 +158,7 @@ const Cart: React.FC<CartProps> = ({ setToggleCart, cartOpen }) => {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
