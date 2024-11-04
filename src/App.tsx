@@ -5,6 +5,8 @@ import { HeroCarousel } from "./HeroCarousel";
 import Products from "./Products";
 import ProductDetail from "./ProductDetail"; // Import the ProductDetail component
 import { CartProvider } from "./CartContext";
+import Checkout from "./Checkout";
+import { ShippingProvider } from "./ShippingContext";
 
 function App() {
   return (
@@ -21,7 +23,6 @@ function App() {
                   id="products"
                   className="flex flex-col items-center min-h-screen p-4"
                 >
-
                   <Products />
                 </main>
               </>
@@ -36,6 +37,14 @@ function App() {
                   <ProductDetail />
                 </main>
               </>
+            }
+          />
+          <Route
+            path="/checkout"
+            element={
+              <ShippingProvider>
+                <Checkout />
+              </ShippingProvider>
             }
           />
         </Routes>

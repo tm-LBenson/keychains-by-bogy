@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useCart } from "./CartContext";
+import { Link } from "react-router-dom";
 
 interface CartProps {
   cartOpen: boolean;
@@ -35,7 +36,7 @@ const Cart: React.FC<CartProps> = ({ setToggleCart, cartOpen }) => {
   };
 
   return (
-    <div className=''>
+    <div className="">
       {/* Cart Icon */}
       <button
         onClick={toggleCart}
@@ -75,9 +76,9 @@ const Cart: React.FC<CartProps> = ({ setToggleCart, cartOpen }) => {
                     viewBox="0 0 20 20"
                   >
                     <path
-                      fill-rule="evenodd"
+                      fillRule="evenodd"
                       d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                      clip-rule="evenodd"
+                      clipRule="evenodd"
                     ></path>
                   </svg>
                 </button>
@@ -151,9 +152,14 @@ const Cart: React.FC<CartProps> = ({ setToggleCart, cartOpen }) => {
               ))}
             </ul>
             <div className="p-4">
-              <button className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded">
-                Checkout
-              </button>
+              <Link to={"/checkout"}>
+                <button
+                  onClick={toggleCart}
+                  className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded"
+                >
+                  Checkout
+                </button>
+              </Link>
             </div>
           </div>
         </div>

@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
 import { Product } from "./Products";
 
-interface CartItem extends Product {
+export interface CartItem extends Product {
   quantity: number;
 }
 
@@ -55,10 +55,12 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
           const newQuantity = setDirectly
             ? quantityChange
             : item.quantity + quantityChange;
-          const itemList = { ...item, quantity: newQuantity >= 1 ? newQuantity : 0 };
-          
-          return itemList
+          const itemList = {
+            ...item,
+            quantity: newQuantity >= 1 ? newQuantity : 0,
+          };
 
+          return itemList;
         }
         return item;
       });
