@@ -147,7 +147,9 @@ const Cart: React.FC<CartProps> = ({ setToggleCart, cartOpen }) => {
                       />
                     </svg>
                   </button>
-                  <span>${(+item.price * item.quantity).toFixed(2)}</span>
+                  <span>
+                    ${(+item.unitAmount.value * item.quantity).toFixed(2)}
+                  </span>
                 </li>
               ))}
             </ul>

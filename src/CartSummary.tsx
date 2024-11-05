@@ -9,7 +9,7 @@ interface CartSummaryProps {
 
 const CartSummary: React.FC<CartSummaryProps> = ({ cartItems }) => {
   const total = cartItems.reduce(
-    (acc, item) => acc + +item.price * item.quantity,
+    (acc, item) => acc + +item.unitAmount.value * item.quantity,
     0,
   );
 
@@ -23,7 +23,7 @@ const CartSummary: React.FC<CartSummaryProps> = ({ cartItems }) => {
             className="flex justify-between py-2"
           >
             {item.name} x {item.quantity}
-            <span>${(+item.price * item.quantity).toFixed(2)}</span>
+            <span>${(+item.unitAmount.value * item.quantity).toFixed(2)}</span>
           </li>
         ))}
         <div className="text-lg font-bold">

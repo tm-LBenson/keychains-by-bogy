@@ -3,12 +3,18 @@ import { db } from "./firestore";
 import { collection, getDocs } from "firebase/firestore";
 import { Link } from "react-router-dom";
 
+
+export interface UnitAmount {
+  currencyCode: string;
+  value: string;
+}
+
 export interface Product {
   id: string;
   name: string;
   description: string;
   imageUrls: string[];
-  price: string;
+  unitAmount: UnitAmount;
   onHand: number;
   originalPrice?: string;
 }
@@ -64,7 +70,7 @@ const Products: React.FC = () => {
                   {product.name}
                 </h3>
                 <h4 className="text-lg text-gray-800 font-bold mt-6">
-                  ${product.price} ${product.originalPrice}
+                  ${product.unitAmount.value} ${product.originalPrice}
                 </h4>
               </div>
             </Link>

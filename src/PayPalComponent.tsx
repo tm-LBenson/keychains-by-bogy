@@ -17,7 +17,7 @@ const PayPalComponent: React.FC = () => {
   // Setup PayPal client-id and environment
   const clientID =
     import.meta.env.VITE_APP_PAYPAL_CLIENT_ID ||
-    "AaTm813GE4jwK9De2B3PNh46yXROz43IbHH4UfWiwnty4wFprR0dEyubux-cobaOsnretANO28eNcZRw";
+    "AeSe7UpLjIDeb7fZ6I9nOn2snsQYn1EaSrFpLLU5Uu4v3zTNDuET0x6y-gx0GWZaCIqS0Eq5F7Afrd-V";
   const apiBaseUrl =
     import.meta.env.VITE_APP_API_BASE_URL || "http://localhost:3000";
 
@@ -48,10 +48,7 @@ const PayPalComponent: React.FC = () => {
                   "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                  cart: items.map((item) => ({
-                    id: item.id,
-                    quantity: item.quantity,
-                  })),
+                  cart: items,
                 }),
               });
 

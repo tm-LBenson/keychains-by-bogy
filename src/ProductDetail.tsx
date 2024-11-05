@@ -12,7 +12,7 @@ const ProductDetail: React.FC = () => {
     name: "",
     description: "",
     imageUrls: [""],
-    price: "",
+    unitAmount: { currencyCode: "USD", value: "" },
     onHand: 0,
   });
   const { id } = useParams<{ id: string }>();
@@ -93,7 +93,7 @@ const ProductDetail: React.FC = () => {
             <h2 className="text-2xl font-bold text-gray-800">{product.name}</h2>
             <div className="flex flex-wrap gap-4 mt-4">
               <p className="text-gray-800 text-xl font-bold">
-                ${product.price}
+                ${product.unitAmount.value}
               </p>
               {product.originalPrice && (
                 <p className="text-gray-400 text-xl">
