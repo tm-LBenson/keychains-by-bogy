@@ -52,7 +52,8 @@ const PayPalComponent: React.FC = () => {
                 }),
               });
 
-              const orderData = await response.json();
+              const orderData = JSON.parse(await response.json());
+
               if (orderData.id) {
                 return orderData.id;
               } else {
@@ -82,17 +83,19 @@ const PayPalComponent: React.FC = () => {
               );
 
               const orderData = await response.json();
-              const errorDetail = orderData?.details?.[0];
-
-              if (errorDetail?.issue === "INSTRUMENT_DECLINED") {
-                return actions.restart();
-              } else if (errorDetail) {
-                throw new Error(
-                  `${errorDetail.description} (${orderData.debug_id})`,
-                );
-              } else {
+              console.log(orderData, "----------");
+              if (orderData.status !== "COMPLETED") {
+                const errorDetail = orderData?.details?.[0];
+                if (errorDetail?.issue === "INSTRUMENT_DECLINED") {
+                  return actions.restart();
+                } else if (errorDetail) {
+                  throw new Error(
+                    `${errorDetail.description} (${orderData.debug_id})`,
+                  );
+                }
+              }
                 const transaction =
-                  orderData.purchase_units[0].payments.captures[0];
+                  orderData.purchaseUnits[0].payments.captures[0];
                 setMessage(
                   `Transaction ${transaction.status}: ${transaction.id}. See console for all available details`,
                 );
@@ -101,7 +104,7 @@ const PayPalComponent: React.FC = () => {
                   orderData,
                   JSON.stringify(orderData, null, 2),
                 );
-              }
+
             } catch (error: any) {
               console.error("PayPal Capture Error:", error);
               setMessage(

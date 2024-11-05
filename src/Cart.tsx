@@ -19,7 +19,7 @@ const Cart: React.FC<CartProps> = ({ setToggleCart, cartOpen }) => {
   const totalItems = items.reduce((total, item) => total + item.quantity, 0);
 
   const handleIncrease = (id: string) => {
-    updateItemQuantity(id, 1); // Assuming this method adjusts the quantity by given amount
+    updateItemQuantity(id, 1);
   };
 
   const handleDecrease = (id: string) => {
@@ -28,7 +28,7 @@ const Cart: React.FC<CartProps> = ({ setToggleCart, cartOpen }) => {
 
   const handleInputChange = (id: string, value: string) => {
     const quantity = parseInt(value, 10);
-    updateItemQuantity(id, quantity, true); // Assuming this method can set quantity directly if third param is true
+    updateItemQuantity(id, quantity, true); 
   };
 
   const handleRemoveItem = (id: string) => {
