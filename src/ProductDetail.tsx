@@ -19,6 +19,7 @@ const ProductDetail: React.FC = () => {
   const { addItem } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [showAddedToCart, setShowAddedToCart] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -26,7 +27,8 @@ const ProductDetail: React.FC = () => {
       const docRef = doc(db, "products", id);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
-        setProduct(docSnap.data() as Product);
+        const productData = docSnap.data() as Product;
+        setProduct(productData);
       } else {
         console.log("No such document!");
       }
@@ -34,6 +36,7 @@ const ProductDetail: React.FC = () => {
 
     fetchProduct();
   }, [id]);
+
   const addToCart = () => {
     addItem({ ...product, quantity });
     setShowAddedToCart(true);
@@ -41,6 +44,7 @@ const ProductDetail: React.FC = () => {
       setShowAddedToCart(false);
     }, 1400);
   };
+
   const increaseQuantity = () => {
     setQuantity((prev) => prev + 1);
   };
@@ -52,6 +56,10 @@ const ProductDetail: React.FC = () => {
   const handleInputChange = (e: { target: { value: string } }) => {
     const value = parseInt(e.target.value, 10);
     setQuantity(value >= 1 ? value : 1);
+  };
+
+  const handleThumbnailClick = (index: number) => {
+    setSelectedImageIndex(index);
   };
 
   if (!product) {
@@ -82,12 +90,35 @@ const ProductDetail: React.FC = () => {
           Back
         </Link>
         <div className="grid items-start grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12">
-          <div className="w-full lg:sticky top-0 sm:flex gap-2">
-            <img
-              src={product.imageUrls[0]}
-              alt={product.name}
-              className="w-full rounded-md object-cover"
-            />
+          <div className="w-full lg:sticky top-0">
+            <div className="flex gap-4">
+              <div className="flex flex-col gap-2  max-h-96 w-28">
+                {product.imageUrls.map((url, index) => (
+                  <div
+                    key={index}
+                    className="w-full aspect-w-1 aspect-h-1"
+                  >
+                    <img
+                      src={url}
+                      alt={`Thumbnail ${index + 1}`}
+                      onClick={() => handleThumbnailClick(index)}
+                      className={`cursor-pointer w-full h-full object-cover rounded-md transition-all duration-200 ${
+                        index === selectedImageIndex
+                          ? "border-4 border-pink-600 scale-105"
+                          : "border"
+                      }`}
+                    />
+                  </div>
+                ))}
+              </div>
+              <div className="flex-1">
+                <img
+                  src={product.imageUrls[selectedImageIndex]}
+                  alt={product.name}
+                  className="w-full h-auto rounded-md object-contain"
+                />
+              </div>
+            </div>
           </div>
           <div>
             <h2 className="text-2xl font-bold text-gray-800">{product.name}</h2>
@@ -101,7 +132,7 @@ const ProductDetail: React.FC = () => {
                 </p>
               )}
             </div>
-            <div className="flex items-center text-black space-x-2">
+            <div className="flex items-center text-black space-x-2 mt-4">
               <button
                 onClick={decreaseQuantity}
                 className="px-3 py-1 text-xl font-semibold border border-gray-400 rounded"
