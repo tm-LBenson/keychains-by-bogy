@@ -1,8 +1,12 @@
-// ShippingContext.tsx
+import React, {
+  createContext,
+  useState,
+  useContext,
+  ReactNode,
+  useEffect,
+} from "react";
 
-import React, { createContext, useState, useContext, ReactNode } from "react";
-
-interface ShippingInfo {
+export interface ShippingInfo {
   fullName: string;
   email: string;
   address: string;
@@ -43,10 +47,38 @@ const ShippingContext = createContext<ShippingContextType>(defaultValues);
 export const ShippingProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [shippingInfo, setShippingInfo] = useState<ShippingInfo>(
-    defaultValues.shippingInfo,
-  );
+  const [shippingInfo, setShippingInfoState] = useState<ShippingInfo>(() => {
+    try {
+      const savedShipping = localStorage.getItem("shippingInfo");
+      if (savedShipping) {
+        const { data, expiry } = JSON.parse(savedShipping);
+        if (expiry > Date.now()) {
+          return data;
+        } else {
+          localStorage.removeItem("shippingInfo");
+        }
+      }
+    } catch (error) {
+      console.error("Failed to parse shipping info from localStorage:", error);
+    }
+    return defaultValues.shippingInfo;
+  });
+
   const [editMode, setEditMode] = useState<boolean>(false);
+
+  useEffect(() => {
+    try {
+      const expiry = Date.now() + 10 * 60 * 1000; // 10 minutes from now
+      const serializedShipping = JSON.stringify({ data: shippingInfo, expiry });
+      localStorage.setItem("shippingInfo", serializedShipping);
+    } catch (error) {
+      console.error("Failed to save shipping info to localStorage:", error);
+    }
+  }, [shippingInfo]);
+
+  const setShippingInfo = (info: ShippingInfo) => {
+    setShippingInfoState(info);
+  };
 
   return (
     <ShippingContext.Provider

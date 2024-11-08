@@ -12,6 +12,7 @@ export interface CartItem extends Product {
 }
 
 interface CartContextType {
+  setItems: (cartItems: CartItem[]) => void;
   isServerAwake: boolean;
   items: CartItem[];
   addItem: (item: CartItem) => void;
@@ -21,6 +22,7 @@ interface CartContextType {
     quantityChange: number,
     setDirectly?: boolean,
   ) => void;
+  wakeUpBackend: () => Promise<void>;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -30,27 +32,48 @@ interface CartProviderProps {
 }
 
 export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
-  const [items, setItems] = useState<CartItem[]>([]);
-  const [isServerAwake, setServerAwake] = useState(false);
-  useEffect(() => {
-    async function wakeServer() {
-      try {
-        let response = await fetch(
-          import.meta.env.VITE_APP_API_BASE_URL
-
-        );
-        let data = response.json();
-        console.log(data);
-        setServerAwake(true);
-      } catch (error) {
-        setServerAwake(false);
-      }
+  const [items, setItemsState] = useState<CartItem[]>(() => {
+    try {
+      const savedCart = localStorage.getItem("cartItems");
+      return savedCart ? JSON.parse(savedCart) : [];
+    } catch (error) {
+      console.error("Failed to parse cart items from localStorage:", error);
+      return [];
     }
-    wakeServer();
+  });
+  const [isServerAwake, setServerAwake] = useState(false);
+
+  useEffect(() => {
+    wakeUpBackend();
   }, []);
 
+  useEffect(() => {
+    try {
+      const serializedItems = JSON.stringify(items);
+      localStorage.setItem("cartItems", serializedItems);
+    } catch (error) {
+      console.error("Failed to save cart items to localStorage:", error);
+    }
+  }, [items]);
+
+  const setItems = (cartItems: CartItem[]) => {
+    setItemsState(cartItems);
+  };
+
+  const wakeUpBackend = async () => {
+    try {
+      let response = await fetch(import.meta.env.VITE_APP_API_BASE_URL);
+      let data = await response.json();
+      console.log(data);
+      setServerAwake(true);
+    } catch (error) {
+      console.error("Failed to wake backend: ", error);
+      setServerAwake(false);
+    }
+  };
+
   const addItem = (newItem: CartItem) => {
-    setItems((prevItems) => {
+    setItemsState((prevItems) => {
       const itemIndex = prevItems.findIndex((item) => item.id === newItem.id);
       if (itemIndex > -1) {
         return prevItems.map((item, index) =>
@@ -65,7 +88,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   };
 
   const removeItem = (id: string) => {
-    setItems((prevItems) => prevItems.filter((item) => item.id !== id));
+    setItemsState((prevItems) => prevItems.filter((item) => item.id !== id));
   };
 
   const updateItemQuantity = (
@@ -73,7 +96,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     quantityChange: number,
     setDirectly = false,
   ) => {
-    setItems((prevItems) => {
+    setItemsState((prevItems) => {
       return prevItems.map((item) => {
         if (item.id === id) {
           const newQuantity = setDirectly
@@ -93,7 +116,15 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
 
   return (
     <CartContext.Provider
-      value={{ items, addItem, removeItem, updateItemQuantity, isServerAwake }}
+      value={{
+        items,
+        addItem,
+        removeItem,
+        updateItemQuantity,
+        isServerAwake,
+        setItems,
+        wakeUpBackend,
+      }}
     >
       {children}
     </CartContext.Provider>
@@ -105,5 +136,8 @@ export const useCart = () => {
   if (context === undefined) {
     throw new Error("useCart must be used within a CartProvider");
   }
-  return context;
+  return {
+    ...context,
+    setItems: (items: CartItem[]) => context.setItems(items),
+  };
 };

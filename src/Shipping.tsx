@@ -21,8 +21,8 @@ const Shipping: React.FC<ShippingFormProps> = ({ onNext }) => {
   };
 
   return (
-    <div className="flex justify-center items-center mt-10">
-      <div className="bg-white shadow-lg rounded-lg p-8 max-w-lg w-full">
+    <div className="flex justify-center items-center">
+      <div className="bg-white shadow-lg rounded-lg p-8 w-full">
         <form
           onSubmit={handleSubmit}
           className="space-y-6"

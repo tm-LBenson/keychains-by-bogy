@@ -16,7 +16,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <div className='relative'>
+    <div className="relative">
       {/* <div className="flex bg-pink-500 shadow-lg  w-full py-4 px-4 sm:px-10  font-[sans-serif] min-h-[80px] tracking-wide  z-50"></div> */}
       <div className="flex bg-pink-500 shadow-lg  w-full top-0 py-4 px-4 sm:px-10  font-[sans-serif] min-h-[70px] tracking-wide  z-50">
         <div className="flex flex-wrap items-center justify-between gap-4 w-full">
@@ -97,12 +97,9 @@ const Navbar: React.FC = () => {
             </svg>
           </button>
         </div>
-              <span className="text-black mt-1 mr-8">
-                <Cart
-                  setToggleCart={toggleCart}
-                  cartOpen={cartOpen}
-                />
-              </span>
+        <span className="text-black mt-1 mr-8">
+          <Cart setToggleCart={toggleCart} />
+        </span>
       </div>
     </div>
   );

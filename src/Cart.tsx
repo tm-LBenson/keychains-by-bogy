@@ -3,11 +3,10 @@ import { useCart } from "./CartContext";
 import { Link } from "react-router-dom";
 
 interface CartProps {
-  cartOpen: boolean;
   setToggleCart: () => void;
 }
 
-const Cart: React.FC<CartProps> = ({ setToggleCart, cartOpen }) => {
+const Cart: React.FC<CartProps> = ({ setToggleCart }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { items, updateItemQuantity, removeItem } = useCart();
 
@@ -28,7 +27,7 @@ const Cart: React.FC<CartProps> = ({ setToggleCart, cartOpen }) => {
 
   const handleInputChange = (id: string, value: string) => {
     const quantity = parseInt(value, 10);
-    updateItemQuantity(id, quantity, true); 
+    updateItemQuantity(id, quantity, true);
   };
 
   const handleRemoveItem = (id: string) => {
@@ -37,7 +36,6 @@ const Cart: React.FC<CartProps> = ({ setToggleCart, cartOpen }) => {
 
   return (
     <div className="">
-      {/* Cart Icon */}
       <button
         onClick={toggleCart}
         className="relative z-20"
@@ -61,109 +59,116 @@ const Cart: React.FC<CartProps> = ({ setToggleCart, cartOpen }) => {
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 w-full h-full bg-black bg-opacity-50 z-50 flex justify-end">
-          <div className="bg-white w-full max-w-md h-full overflow-auto">
-            <div className="flex justify-between items-center p-4 border-b">
-              <h3 className="text-xl font-bold">Shopping Cart</h3>
-              {cartOpen && (
-                <button
-                  onClick={toggleCart}
-                  className="text-gray-400 hover:text-red-500"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6 fill-black"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                      clipRule="evenodd"
-                    ></path>
-                  </svg>
-                </button>
-              )}
+        <div className="fixed top-0 right-0 w-full max-w-md h-full bg-white z-50 shadow-lg overflow-auto">
+          <div className="flex justify-between items-center p-4 border-b">
+            <h3 className="text-xl font-bold">Shopping Cart</h3>
+            <button
+              onClick={toggleCart}
+              className="text-gray-400 hover:text-red-500"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 fill-black"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                  clipRule="evenodd"
+                ></path>
+              </svg>
+            </button>
+          </div>
+
+          {items.length === 0 ? (
+            <div className="p-4">
+              <p className="text-center text-gray-500">
+                Your cart is empty. Start shopping now!
+              </p>
             </div>
-            <ul className="divide-y">
-              {items.map((item) => (
-                <li
-                  key={item.id}
-                  className="flex justify-between items-center p-4"
-                >
-                  <div className="flex items-center space-x-4">
-                    <img
-                      src={item.imageUrls[0]}
-                      alt={item.name}
-                      className="h-16 w-16 rounded"
-                    />
-                    <div>
-                      <p className="font-bold">{item.name}</p>
-                      <div className="flex items-center space-x-2">
-                        <button
-                          onClick={() => {
-                            handleDecrease(item.id);
-                            if (item.quantity === 1) {
-                              handleRemoveItem(item.id);
+          ) : (
+            <>
+              <ul className="divide-y">
+                {items.map((item) => (
+                  <li
+                    key={item.id}
+                    className="flex justify-between items-center p-4"
+                  >
+                    <div className="flex items-center space-x-4">
+                      <img
+                        src={item.imageUrls[0]}
+                        alt={item.name}
+                        className="h-16 w-16 rounded"
+                      />
+                      <div>
+                        <p className="font-bold">{item.name}</p>
+                        <div className="flex items-center space-x-2">
+                          <button
+                            onClick={() => {
+                              handleDecrease(item.id);
+                              if (item.quantity === 1) {
+                                handleRemoveItem(item.id);
+                              }
+                            }}
+                            className="px-3 py-1 text-xl font-semibold border border-gray-400 rounded"
+                          >
+                            -
+                          </button>
+                          <input
+                            type="number"
+                            value={item.quantity}
+                            onChange={(e) =>
+                              handleInputChange(item.id, e.target.value)
                             }
-                          }}
-                          className="px-3 py-1 text-xl font-semibold border border-gray-400 rounded"
-                        >
-                          -
-                        </button>
-                        <input
-                          type="number"
-                          value={item.quantity}
-                          onChange={(e) =>
-                            handleInputChange(item.id, e.target.value)
-                          }
-                          className="w-16 text-center text-xl border rounded"
-                          min="0"
-                        />
-                        <button
-                          onClick={() => handleIncrease(item.id)}
-                          className="px-3 py-1 text-xl font-semibold border border-gray-400 rounded"
-                        >
-                          +
-                        </button>
+                            className="w-16 text-center text-xl border rounded"
+                            min="0"
+                          />
+                          <button
+                            onClick={() => handleIncrease(item.id)}
+                            className="px-3 py-1 text-xl font-semibold border border-gray-400 rounded"
+                          >
+                            +
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <button
-                    onClick={() => handleRemoveItem(item.id)}
-                    className="ml-4 text-gray-400 hover:text-red-500"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2}
+                    <button
+                      onClick={() => handleRemoveItem(item.id)}
+                      className="ml-4 text-gray-400 hover:text-red-500"
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-6 w-6"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
+                    <span>
+                      ${(+item.unitAmount.value * item.quantity).toFixed(2)}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              <div className="p-4">
+                <Link to={"/checkout"}>
+                  <button
+                    onClick={toggleCart}
+                    className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded"
+                  >
+                    Checkout
                   </button>
-                  <span>
-                    ${(+item.unitAmount.value * item.quantity).toFixed(2)}
-                  </span>
-                </li>
-              ))}
-            </ul>
-            <div className="p-4">
-              <Link to={"/checkout"}>
-                <button
-                  onClick={toggleCart}
-                  className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded"
-                >
-                  Checkout
-                </button>
-              </Link>
-            </div>
-          </div>
+                </Link>
+              </div>
+            </>
+          )}
         </div>
       )}
     </div>

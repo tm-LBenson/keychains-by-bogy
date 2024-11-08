@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { useCart } from "./CartContext"; // Assuming you have a cart context
+import { useNavigate } from "react-router-dom";
+import LoadingBackend from "./LoadingBackend";
 
 interface MessageProps {
   content: string;
@@ -10,9 +12,10 @@ const Message: React.FC<MessageProps> = ({ content }) => {
   return <p>{content}</p>;
 };
 
-const PayPalComponent: React.FC = () => {
-  const { items } = useCart();
+const PayPalComponent: React.FC<{ shippingInfo: any }> = ({ shippingInfo }) => {
+  const { items, setItems, isServerAwake, wakeUpBackend } = useCart();
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
   // Setup PayPal client-id and environment
   const clientID = import.meta.env.VITE_APP_PAYPAL_CLIENT_ID;
@@ -26,7 +29,12 @@ const PayPalComponent: React.FC = () => {
     "buyer-country": "US",
     components: "buttons",
   };
-
+  useEffect(() => {
+    wakeUpBackend();
+  }, [isServerAwake]);
+  if (!isServerAwake) {
+    return <LoadingBackend />;
+  }
   return (
     <div className="paypal-button-container">
       <PayPalScriptProvider options={initialOptions}>
@@ -80,7 +88,6 @@ const PayPalComponent: React.FC = () => {
               );
 
               const orderData = await response.json();
-              console.log(orderData, "----------");
               if (orderData.status !== "COMPLETED") {
                 const errorDetail = orderData?.details?.[0];
                 if (errorDetail?.issue === "INSTRUMENT_DECLINED") {
@@ -93,14 +100,26 @@ const PayPalComponent: React.FC = () => {
               }
               const transaction =
                 orderData.purchaseUnits[0].payments.captures[0];
-              setMessage(
-                `Transaction ${transaction.status}: ${transaction.id}. See console for all available details`,
+
+              // Prepare order summary data
+              const orderId = transaction.id;
+              const totalAmount = items.reduce(
+                (total, item) => total + +item.unitAmount.value * item.quantity,
+                0,
               );
-              console.log(
-                "Capture result",
-                orderData,
-                JSON.stringify(orderData, null, 2),
-              );
+
+              // Clear the cart
+              setItems([]);
+
+              // Redirect to the Order Complete page with order details
+              navigate("/order-complete", {
+                state: {
+                  items,
+                  orderId,
+                  totalAmount,
+                  shippingInfo, // Pass shipping info to order complete page
+                },
+              });
             } catch (error: any) {
               console.error("PayPal Capture Error:", error);
               setMessage(

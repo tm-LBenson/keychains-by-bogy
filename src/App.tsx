@@ -3,13 +3,13 @@ import "./App.css";
 import Navbar from "./NavBar";
 import { HeroCarousel } from "./HeroCarousel";
 import Products from "./Products";
-import ProductDetail from "./ProductDetail"; // Import the ProductDetail component
+import ProductDetail from "./ProductDetail";
 import { CartProvider } from "./CartContext";
 import Checkout from "./Checkout";
 import { ShippingProvider } from "./ShippingContext";
+import OrderComplete from "./OrderComplete";
 
 function App() {
-
   return (
     <Router>
       <CartProvider>
@@ -29,7 +29,6 @@ function App() {
               </>
             }
           />
-
           <Route
             path="/product/:id"
             element={
@@ -46,6 +45,14 @@ function App() {
               <ShippingProvider>
                 <Checkout />
               </ShippingProvider>
+            }
+          />
+          <Route
+            path="/order-complete"
+            element={
+              <main>
+                <OrderComplete />
+              </main>
             }
           />
         </Routes>
