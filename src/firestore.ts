@@ -4,7 +4,7 @@ import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBmgXbT57B18rYP8ASZrOEm98JpoNW-Awo",
+  apiKey: import.meta.env.VITE_GOOGLE_API_KEY,
   authDomain: "keychains-by-bogy.firebaseapp.com",
   projectId: "keychains-by-bogy",
   storageBucket: "keychains-by-bogy.firebasestorage.app",
