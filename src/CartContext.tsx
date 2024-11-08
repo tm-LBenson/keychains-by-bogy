@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
 import { Product } from "./Products";
 
 export interface CartItem extends Product {
@@ -6,6 +12,7 @@ export interface CartItem extends Product {
 }
 
 interface CartContextType {
+  isServerAwake: boolean;
   items: CartItem[];
   addItem: (item: CartItem) => void;
   removeItem: (id: string) => void;
@@ -24,6 +31,19 @@ interface CartProviderProps {
 
 export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   const [items, setItems] = useState<CartItem[]>([]);
+  const [isServerAwake, setServerAwake] = useState(false);
+  useEffect(() => {
+    async function wakeServer() {
+      try {
+        let response = await fetch(import.meta.env.VITE_APP_API_BASE_URL);
+        console.log(response);
+        setServerAwake(true);
+      } catch (error) {
+        setServerAwake(false);
+      }
+    }
+    wakeServer();
+  }, []);
 
   const addItem = (newItem: CartItem) => {
     setItems((prevItems) => {
@@ -69,7 +89,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
 
   return (
     <CartContext.Provider
-      value={{ items, addItem, removeItem, updateItemQuantity }}
+      value={{ items, addItem, removeItem, updateItemQuantity, isServerAwake }}
     >
       {children}
     </CartContext.Provider>

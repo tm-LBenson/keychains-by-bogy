@@ -15,11 +15,8 @@ const PayPalComponent: React.FC = () => {
   const [message, setMessage] = useState("");
 
   // Setup PayPal client-id and environment
-  const clientID =
-    import.meta.env.VITE_APP_PAYPAL_CLIENT_ID ||
-    "AeSe7UpLjIDeb7fZ6I9nOn2snsQYn1EaSrFpLLU5Uu4v3zTNDuET0x6y-gx0GWZaCIqS0Eq5F7Afrd-V";
-  const apiBaseUrl =
-    import.meta.env.VITE_APP_API_BASE_URL || "http://localhost:3000";
+  const clientID = import.meta.env.VITE_APP_PAYPAL_CLIENT_ID;
+  const apiBaseUrl = import.meta.env.VITE_APP_API_BASE_URL;
 
   const initialOptions = {
     clientId: clientID,
@@ -94,17 +91,16 @@ const PayPalComponent: React.FC = () => {
                   );
                 }
               }
-                const transaction =
-                  orderData.purchaseUnits[0].payments.captures[0];
-                setMessage(
-                  `Transaction ${transaction.status}: ${transaction.id}. See console for all available details`,
-                );
-                console.log(
-                  "Capture result",
-                  orderData,
-                  JSON.stringify(orderData, null, 2),
-                );
-
+              const transaction =
+                orderData.purchaseUnits[0].payments.captures[0];
+              setMessage(
+                `Transaction ${transaction.status}: ${transaction.id}. See console for all available details`,
+              );
+              console.log(
+                "Capture result",
+                orderData,
+                JSON.stringify(orderData, null, 2),
+              );
             } catch (error: any) {
               console.error("PayPal Capture Error:", error);
               setMessage(

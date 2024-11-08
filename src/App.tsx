@@ -9,6 +9,7 @@ import Checkout from "./Checkout";
 import { ShippingProvider } from "./ShippingContext";
 
 function App() {
+
   return (
     <Router>
       <CartProvider>
