@@ -36,8 +36,8 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     async function wakeServer() {
       try {
         let response = await fetch(
-          import.meta.env.VITE_APP_API_BASE_URL ||
-            "https://keychain-backend.onrender.com",
+          import.meta.env.VITE_APP_API_BASE_URL
+
         );
         let data = response.json();
         console.log(data);
