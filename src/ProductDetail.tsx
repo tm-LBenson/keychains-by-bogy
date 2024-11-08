@@ -126,11 +126,6 @@ const ProductDetail: React.FC = () => {
               <p className="text-gray-800 text-xl font-bold">
                 ${product.unitAmount.value}
               </p>
-              {product.originalPrice && (
-                <p className="text-gray-400 text-xl">
-                  <span className="text-sm ml-1.5">Tax included</span>
-                </p>
-              )}
             </div>
             <div className="flex items-center text-black space-x-2 mt-4">
               <button
