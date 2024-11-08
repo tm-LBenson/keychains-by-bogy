@@ -9,14 +9,14 @@ import { useCart } from "./CartContext";
 const Checkout: React.FC = () => {
   const [step, setStep] = useState(1);
 
-  const { items } = useCart();
+  const { items, isServerAwake } = useCart();
 
   const handleNextStep = () => {
     setStep(step + 1); // Increment step to move to the next part of the process
   };
 
   const handleEditShipping = () => {
-    setStep(1); 
+    setStep(1);
   };
 
   return (
@@ -31,7 +31,11 @@ const Checkout: React.FC = () => {
           {/* {step === 3 && <PaymentInfo />} */}
         </div>
         <div className="md:col-span-1">
-          <CartSummary cartItems={items} />
+          {isServerAwake ? (
+            <CartSummary cartItems={items} />
+          ) : (
+            <p>Loading...</p>
+          )}
         </div>
       </div>
     </div>

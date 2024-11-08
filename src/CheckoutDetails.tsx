@@ -3,12 +3,11 @@
 import React from "react";
 import ShippingReview from "./ShippingReview";
 import PayPalComponent from "./PayPalComponent";
-import { useCart } from "./CartContext";
 
 interface CheckoutDetailsProps {
   handleEditShipping: () => void;
 }
-const isServerAwake = useCart().isServerAwake;
+
 const CheckoutDetails: React.FC<CheckoutDetailsProps> = ({
   handleEditShipping,
 }) => {
@@ -18,7 +17,7 @@ const CheckoutDetails: React.FC<CheckoutDetailsProps> = ({
         <ShippingReview handleEditShipping={handleEditShipping} />
       </div>
       <div className="w-[90%]">
-        {isServerAwake ? <PayPalComponent /> : <p>Loading...</p>}
+        <PayPalComponent />
       </div>
     </div>
   );
