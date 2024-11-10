@@ -35,10 +35,10 @@ const Cart: React.FC<CartProps> = ({ setToggleCart }) => {
   };
 
   return (
-    <div className="">
+    <div className="z-50">
       <button
         onClick={toggleCart}
-        className="relative z-20"
+        className="relative z-50"
       >
         {totalItems > 0 && (
           <span className="absolute bottom-5 left-6 inline-flex items-center justify-center px-2 py-1 bg-red-500 rounded-full text-white text-xs">
@@ -59,7 +59,10 @@ const Cart: React.FC<CartProps> = ({ setToggleCart }) => {
       </button>
 
       {isOpen && (
-        <div className="fixed top-0 right-0 w-full max-w-md h-full bg-white z-50 shadow-lg overflow-auto">
+        <div
+          style={{ zIndex: "1000" }}
+          className="fixed top-0 right-0 w-full max-w-md h-full bg-white shadow-lg overflow-auto"
+        >
           <div className="flex justify-between items-center p-4 border-b">
             <h3 className="text-xl font-bold">Shopping Cart</h3>
             <button
