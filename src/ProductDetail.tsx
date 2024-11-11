@@ -14,6 +14,7 @@ const ProductDetail: React.FC = () => {
     imageUrls: [""],
     unitAmount: { currencyCode: "USD", value: "" },
     onHand: 0,
+    showOnStore: false,
   });
   const { id } = useParams<{ id: string }>();
   const { addItem } = useCart();
