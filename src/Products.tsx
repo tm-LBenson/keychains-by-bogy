@@ -16,6 +16,7 @@ export interface Product {
   unitAmount: UnitAmount;
   onHand: number;
   originalPrice?: string;
+  showOnStore: boolean;
 }
 
 const Products: React.FC = () => {
@@ -25,10 +26,12 @@ const Products: React.FC = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       const querySnapshot = await getDocs(collection(db, "products"));
-      const productsArray: Product[] = querySnapshot.docs.map((doc) => ({
-        ...(doc.data() as Product),
-        id: doc.id,
-      }));
+      const productsArray: Product[] = querySnapshot.docs
+        .map((doc) => ({
+          ...(doc.data() as Product),
+          id: doc.id,
+        }))
+        .filter((product) => product.showOnStore);
       setProducts(productsArray);
       setLoading(false);
     };
