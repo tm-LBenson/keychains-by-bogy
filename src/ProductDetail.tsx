@@ -14,13 +14,17 @@ const ProductDetail: React.FC = () => {
     imageUrls: [""],
     unitAmount: { currencyCode: "USD", value: "" },
     onHand: 0,
-    showOnStore: false,
+    showOnStore: false
+  
   });
   const { id } = useParams<{ id: string }>();
   const { addItem } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [showAddedToCart, setShowAddedToCart] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [selectedOptions, setSelectedOptions] = useState<{
+    [key: string]: string;
+  }>({});
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -29,7 +33,7 @@ const ProductDetail: React.FC = () => {
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         const productData = docSnap.data() as Product;
-        setProduct(productData);
+        setProduct({ ...productData, id: docSnap.id });
       } else {
         console.log("No such document!");
       }
@@ -39,7 +43,7 @@ const ProductDetail: React.FC = () => {
   }, [id]);
 
   const addToCart = () => {
-    addItem({ ...product, quantity });
+    addItem({ ...product, quantity, selectedOptions });
     setShowAddedToCart(true);
     setTimeout(() => {
       setShowAddedToCart(false);
@@ -61,6 +65,22 @@ const ProductDetail: React.FC = () => {
 
   const handleThumbnailClick = (index: number) => {
     setSelectedImageIndex(index);
+  };
+
+  const handleOptionChange = (optionName: string, value: string) => {
+    setSelectedOptions((prev) => ({
+      ...prev,
+      [optionName]: value,
+    }));
+  };
+
+  const isAddToCartDisabled = () => {
+    // Check if all options have been selected if options are present
+    return (
+      product.options &&
+      product.options.length > 0 &&
+      product.options.some((option) => !selectedOptions[option.name])
+    );
   };
 
   if (!product) {
@@ -93,7 +113,7 @@ const ProductDetail: React.FC = () => {
         <div className="grid items-start grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12">
           <div className="w-full lg:sticky top-0">
             <div className="flex gap-4">
-              <div className="flex flex-col gap-2  max-h-96 w-28">
+              <div className="flex flex-col gap-2 max-h-96 w-28">
                 {product.imageUrls.map((url, index) => (
                   <div
                     key={index}
@@ -128,6 +148,41 @@ const ProductDetail: React.FC = () => {
                 ${product.unitAmount.value}
               </p>
             </div>
+            {product.options && product.options.length > 0 && (
+              <div className="mt-4">
+                {product.options?.map((option) => (
+                  <div
+                    key={option.name}
+                    className="mb-4"
+                  >
+                    <label
+                      htmlFor={option.name}
+                      className="block font-semibold text-gray-800"
+                    >
+                      {option.name}
+                    </label>
+                    <select
+                      id={option.name}
+                      value={selectedOptions[option.name] || ""}
+                      onChange={(e) =>
+                        handleOptionChange(option.name, e.target.value)
+                      }
+                      className="w-full mt-1 p-2 border rounded"
+                    >
+                      <option value="">Select {option.name}</option>
+                      {option.choices.map((choice) => (
+                        <option
+                          key={choice}
+                          value={choice}
+                        >
+                          {choice}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                ))}
+              </div>
+            )}
             <div className="flex items-center text-black space-x-2 mt-4">
               <button
                 onClick={decreaseQuantity}
@@ -157,7 +212,12 @@ const ProductDetail: React.FC = () => {
             <button
               onClick={addToCart}
               type="button"
-              className="w-full mt-8 px-6 py-3 relative bg-pink-600 hover:bg-pink-700 text-white text-sm font-semibold rounded-md"
+              className={`w-full mt-8 px-6 py-3 relative ${
+                isAddToCartDisabled()
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-pink-600 hover:bg-pink-700"
+              } text-white text-sm font-semibold rounded-md`}
+              disabled={isAddToCartDisabled()}
             >
               <div className="absolute right-0 bottom-11">
                 <AddedToCart

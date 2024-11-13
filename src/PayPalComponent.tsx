@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
-import { useCart } from "./CartContext"; // Assuming you have a cart context
+import { useCart } from "./CartContext";
 import { useNavigate } from "react-router-dom";
 import LoadingBackend from "./LoadingBackend";
 import { useShipping } from "./ShippingContext";
@@ -13,9 +13,11 @@ const Message: React.FC<MessageProps> = ({ content }) => {
   return <p>{content}</p>;
 };
 
+
 const PayPalComponent = () => {
   const { shippingInfo } = useShipping();
   const { items, setItems, isServerAwake, wakeUpBackend } = useCart();
+
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
@@ -49,24 +51,38 @@ const PayPalComponent = () => {
           }}
           createOrder={async () => {
             try {
+              const purchaseUnits = items.map((item) => ({
+                id: item.id,
+                quantity: item.quantity,
+                selectedOptions: item.selectedOptions,
+                amount: {
+                  currency_code: item.unitAmount.currencyCode,
+                  value: +item.unitAmount.value * item.quantity,
+                },
+              }));
+
               const response = await fetch(`${apiBaseUrl}/api/orders`, {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                  cart: items,
+                  cart: purchaseUnits,
                 }),
               });
 
-              const orderData = JSON.parse(await response.json());
+              let data = await response.json();
+              if (data.error) {
+                throw new Error(data.error);
+              }
+              data = JSON.parse(data);
 
-              if (orderData.id) {
-                return orderData.id;
+              if (data.id) {
+                return data.id;
               } else {
-                const errorDetail = orderData?.details?.[0];
+                const errorDetail = data?.details?.[0];
                 const errorMessage = errorDetail
-                  ? `${errorDetail.issue} ${errorDetail.description} (${orderData.debug_id})`
+                  ? `${errorDetail.issue} ${errorDetail.description} (${data.debug_id})`
                   : "Unexpected error occurred";
                 throw new Error(errorMessage);
               }
@@ -108,16 +124,14 @@ const PayPalComponent = () => {
                 0,
               );
 
-              // Clear the cart
               setItems([]);
 
-              // Redirect to the Order Complete page with order details
               navigate("/order-complete", {
                 state: {
                   items,
                   orderId,
                   totalAmount,
-                  shippingInfo, // Pass shipping info to order complete page
+                  shippingInfo,
                 },
               });
             } catch (error) {

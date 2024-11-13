@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Shipping from "./Shipping";
 import CartSummary from "./CartSummary";
 import CheckoutDetails from "./CheckoutDetails";
@@ -18,6 +18,10 @@ const Checkout: React.FC = () => {
   const handleEditShipping = () => {
     setStep(1);
   };
+
+  useEffect(() => {
+    console.log("Items Updated");
+  }, [items]);
 
   if (items.length === 0) {
     // If the cart is empty, display a message instead of proceeding to checkout steps

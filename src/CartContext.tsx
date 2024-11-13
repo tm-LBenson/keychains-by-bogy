@@ -8,7 +8,9 @@ import React, {
 import { Product } from "./Products";
 
 export interface CartItem extends Product {
+  id: string;
   quantity: number;
+  selectedOptions?: { [key: string]: string };
 }
 
 interface CartContextType {
@@ -16,9 +18,10 @@ interface CartContextType {
   isServerAwake: boolean;
   items: CartItem[];
   addItem: (item: CartItem) => void;
-  removeItem: (id: string) => void;
+  removeItem: (id: string, selectedOptions?: { [key: string]: string }) => void;
   updateItemQuantity: (
     id: string,
+    selectedOptions: { [key: string]: string },
     quantityChange: number,
     setDirectly?: boolean,
   ) => void;
@@ -31,11 +34,25 @@ interface CartProviderProps {
   children: ReactNode;
 }
 
+const normalizeOptions = (options: { [key: string]: string } | undefined) => {
+  if (!options) return "";
+  return JSON.stringify(
+    Object.keys(options)
+      .sort()
+      .reduce((acc, key) => {
+        acc[key] = options[key];
+        return acc;
+      }, {} as { [key: string]: string }),
+  );
+};
+
 export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   const [items, setItemsState] = useState<CartItem[]>(() => {
     try {
       const savedCart = localStorage.getItem("cartItems");
-      return savedCart ? JSON.parse(savedCart) : [];
+      const parsedCart = savedCart ? JSON.parse(savedCart) : [];
+      // Ensure every item has an id
+      return parsedCart.filter((item: CartItem) => item.id);
     } catch (error) {
       console.error("Failed to parse cart items from localStorage:", error);
       return [];
@@ -57,7 +74,9 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   }, [items]);
 
   const setItems = (cartItems: CartItem[]) => {
-    setItemsState(cartItems);
+    // Filter out items without a valid id
+    const validItems = cartItems.filter((item) => item.id);
+    setItemsState(validItems);
   };
 
   const wakeUpBackend = async () => {
@@ -73,45 +92,67 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   };
 
   const addItem = (newItem: CartItem) => {
+    if (!newItem.id) {
+      console.error("Attempted to add item without a valid 'id':", newItem);
+      return;
+    }
+
     setItemsState((prevItems) => {
-      const itemIndex = prevItems.findIndex((item) => item.id === newItem.id);
-      if (itemIndex > -1) {
+      const uniqueKey = `${newItem.id}-${normalizeOptions(
+        newItem.selectedOptions,
+      )}`;
+      const existingItemIndex = prevItems.findIndex((item) => {
+        const itemKey = `${item.id}-${normalizeOptions(item.selectedOptions)}`;
+        return itemKey === uniqueKey;
+      });
+
+      if (existingItemIndex > -1) {
         return prevItems.map((item, index) =>
-          index === itemIndex
+          index === existingItemIndex
             ? { ...item, quantity: item.quantity + newItem.quantity }
             : item,
         );
       } else {
-        return [...prevItems, newItem];
+        return [...prevItems, { ...newItem, quantity: newItem.quantity }];
       }
     });
   };
 
-  const removeItem = (id: string) => {
-    setItemsState((prevItems) => prevItems.filter((item) => item.id !== id));
+  const removeItem = (
+    id: string,
+    selectedOptions?: { [key: string]: string },
+  ) => {
+    setItemsState((prevItems) =>
+      prevItems.filter(
+        (item) =>
+          item.id !== id ||
+          (selectedOptions &&
+            normalizeOptions(item.selectedOptions) !==
+              normalizeOptions(selectedOptions)),
+      ),
+    );
   };
 
   const updateItemQuantity = (
     id: string,
+    selectedOptions: { [key: string]: string },
     quantityChange: number,
     setDirectly = false,
   ) => {
-    setItemsState((prevItems) => {
-      return prevItems.map((item) => {
-        if (item.id === id) {
+    const uniqueKey = `${id}-${normalizeOptions(selectedOptions)}`;
+    setItemsState((prevItems) =>
+      prevItems.map((item) => {
+        if (
+          `${item.id}-${normalizeOptions(item.selectedOptions)}` === uniqueKey
+        ) {
           const newQuantity = setDirectly
             ? quantityChange
             : item.quantity + quantityChange;
-          const itemList = {
-            ...item,
-            quantity: newQuantity >= 1 ? newQuantity : 0,
-          };
-
-          return itemList;
+          return { ...item, quantity: newQuantity >= 1 ? newQuantity : 0 };
         }
         return item;
-      });
-    });
+      }),
+    );
   };
 
   return (

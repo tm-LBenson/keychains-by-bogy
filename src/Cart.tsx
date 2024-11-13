@@ -17,21 +17,34 @@ const Cart: React.FC<CartProps> = ({ setToggleCart }) => {
 
   const totalItems = items.reduce((total, item) => total + item.quantity, 0);
 
-  const handleIncrease = (id: string) => {
-    updateItemQuantity(id, 1);
+  const handleIncrease = (
+    id: string,
+    selectedOptions: { [key: string]: string },
+  ) => {
+    updateItemQuantity(id, selectedOptions, 1);
   };
 
-  const handleDecrease = (id: string) => {
-    updateItemQuantity(id, -1);
+  const handleDecrease = (
+    id: string,
+    selectedOptions: { [key: string]: string },
+  ) => {
+    updateItemQuantity(id, selectedOptions, -1);
   };
 
-  const handleInputChange = (id: string, value: string) => {
+  const handleInputChange = (
+    id: string,
+    selectedOptions: { [key: string]: string },
+    value: string,
+  ) => {
     const quantity = parseInt(value, 10);
-    updateItemQuantity(id, quantity, true);
+    updateItemQuantity(id, selectedOptions, quantity, true);
   };
 
-  const handleRemoveItem = (id: string) => {
-    removeItem(id);
+  const handleRemoveItem = (
+    id: string,
+    selectedOptions: { [key: string]: string },
+  ) => {
+    removeItem(id, selectedOptions);
   };
 
   return (
@@ -94,7 +107,7 @@ const Cart: React.FC<CartProps> = ({ setToggleCart }) => {
               <ul className="divide-y">
                 {items.map((item) => (
                   <li
-                    key={item.id}
+                    key={`${item.id}-${JSON.stringify(item.selectedOptions)}`}
                     className="flex justify-between items-center p-4"
                   >
                     <div className="flex items-center space-x-4">
@@ -105,12 +118,29 @@ const Cart: React.FC<CartProps> = ({ setToggleCart }) => {
                       />
                       <div>
                         <p className="font-bold">{item.name}</p>
-                        <div className="flex items-center space-x-2">
+                        {item.selectedOptions && (
+                          <div className="text-sm text-gray-600">
+                            {Object.entries(item.selectedOptions).map(
+                              ([optionName, optionValue]) => (
+                                <p key={optionName}>
+                                  {optionName}: {optionValue}
+                                </p>
+                              ),
+                            )}
+                          </div>
+                        )}
+                        <div className="flex items-center space-x-2 mt-2">
                           <button
                             onClick={() => {
-                              handleDecrease(item.id);
+                              handleDecrease(
+                                item.id,
+                                item.selectedOptions || {},
+                              );
                               if (item.quantity === 1) {
-                                handleRemoveItem(item.id);
+                                handleRemoveItem(
+                                  item.id,
+                                  item.selectedOptions || {},
+                                );
                               }
                             }}
                             className="px-3 py-1 text-xl font-semibold border border-gray-400 rounded"
@@ -121,13 +151,22 @@ const Cart: React.FC<CartProps> = ({ setToggleCart }) => {
                             type="number"
                             value={item.quantity}
                             onChange={(e) =>
-                              handleInputChange(item.id, e.target.value)
+                              handleInputChange(
+                                item.id,
+                                item.selectedOptions || {},
+                                e.target.value,
+                              )
                             }
                             className="w-16 text-center text-xl border rounded"
                             min="0"
                           />
                           <button
-                            onClick={() => handleIncrease(item.id)}
+                            onClick={() =>
+                              handleIncrease(
+                                item.id,
+                                item.selectedOptions || {},
+                              )
+                            }
                             className="px-3 py-1 text-xl font-semibold border border-gray-400 rounded"
                           >
                             +
@@ -136,7 +175,9 @@ const Cart: React.FC<CartProps> = ({ setToggleCart }) => {
                       </div>
                     </div>
                     <button
-                      onClick={() => handleRemoveItem(item.id)}
+                      onClick={() =>
+                        handleRemoveItem(item.id, item.selectedOptions || {})
+                      }
                       className="ml-4 text-gray-400 hover:text-red-500"
                     >
                       <svg

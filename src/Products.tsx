@@ -17,12 +17,17 @@ export interface Product {
   onHand: number;
   originalPrice?: string;
   showOnStore: boolean;
+  options?: ProductOption[];
+}
+export interface ProductOption {
+  name: string;
+  choices: string[];
 }
 
 const Products: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-
+  console.log(products);
   useEffect(() => {
     const fetchProducts = async () => {
       const querySnapshot = await getDocs(collection(db, "products"));
