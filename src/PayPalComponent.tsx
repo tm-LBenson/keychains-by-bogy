@@ -13,7 +13,8 @@ const Message: React.FC<MessageProps> = ({ content }) => {
 };
 
 const PayPalComponent: React.FC<{ shippingInfo }> = ({ shippingInfo }) => {
-  const { items, setItems, isServerAwake, wakeUpBackend } = useCart();
+  const { isServerAwake, wakeUpBackend, setItems, items } = useCart();
+
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
@@ -47,24 +48,15 @@ const PayPalComponent: React.FC<{ shippingInfo }> = ({ shippingInfo }) => {
           }}
           createOrder={async () => {
             try {
-              // Ensure the `id` field is included in the cart items
-              const cartItems = items.map(
-                ({
-                  id,
-                  name,
-                  unitAmount,
-                  quantity,
-                  selectedOptions,
-                  ...rest
-                }) => ({
-                  id,
-                  name,
-                  unitAmount,
-                  quantity,
-                  selectedOptions,
-                  ...rest,
-                }),
-              );
+              const purchaseUnits = items.map((item) => ({
+                id: item.id,
+                quantity: item.quantity,
+                selectedOptions: item.selectedOptions,
+                amount: {
+                  currency_code: item.unitAmount.currencyCode,
+                  value: +item.unitAmount.value * item.quantity,
+                },
+              }));
 
               const response = await fetch(`${apiBaseUrl}/api/orders`, {
                 method: "POST",
@@ -72,22 +64,22 @@ const PayPalComponent: React.FC<{ shippingInfo }> = ({ shippingInfo }) => {
                   "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                  cart: cartItems,
+                  cart: purchaseUnits,
                 }),
               });
-              console.log(cartItems); // Verify cart items structure
 
-              const data = await response.json();
+              let data = await response.json();
               if (data.error) {
                 throw new Error(data.error);
               }
-              const orderData = JSON.parse(data);
-              if (orderData.id) {
-                return orderData.id;
+              data = JSON.parse(data);
+
+              if (data.id) {
+                return data.id;
               } else {
-                const errorDetail = orderData?.details?.[0];
+                const errorDetail = data?.details?.[0];
                 const errorMessage = errorDetail
-                  ? `${errorDetail.issue} ${errorDetail.description} (${orderData.debug_id})`
+                  ? `${errorDetail.issue} ${errorDetail.description} (${data.debug_id})`
                   : "Unexpected error occurred";
                 throw new Error(errorMessage);
               }

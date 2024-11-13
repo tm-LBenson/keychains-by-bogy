@@ -81,8 +81,8 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
 
   const wakeUpBackend = async () => {
     try {
-      let response = await fetch(import.meta.env.VITE_APP_API_BASE_URL);
-      let data = await response.json();
+      const response = await fetch(import.meta.env.VITE_APP_API_BASE_URL);
+      const data = await response.json();
       console.log(data);
       setServerAwake(true);
     } catch (error) {
