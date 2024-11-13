@@ -3,6 +3,7 @@ import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { useCart } from "./CartContext"; // Assuming you have a cart context
 import { useNavigate } from "react-router-dom";
 import LoadingBackend from "./LoadingBackend";
+import { useShipping } from "./ShippingContext";
 
 interface MessageProps {
   content: string;
@@ -12,7 +13,8 @@ const Message: React.FC<MessageProps> = ({ content }) => {
   return <p>{content}</p>;
 };
 
-const PayPalComponent: React.FC<{ shippingInfo: any }> = ({ shippingInfo }) => {
+const PayPalComponent = () => {
+  const { shippingInfo } = useShipping();
   const { items, setItems, isServerAwake, wakeUpBackend } = useCart();
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
@@ -31,7 +33,7 @@ const PayPalComponent: React.FC<{ shippingInfo: any }> = ({ shippingInfo }) => {
   };
   useEffect(() => {
     wakeUpBackend();
-  }, [isServerAwake]);
+  }, [isServerAwake, wakeUpBackend]);
   if (!isServerAwake) {
     return <LoadingBackend />;
   }
@@ -68,11 +70,9 @@ const PayPalComponent: React.FC<{ shippingInfo: any }> = ({ shippingInfo }) => {
                   : "Unexpected error occurred";
                 throw new Error(errorMessage);
               }
-            } catch (error: any) {
+            } catch (error) {
               console.error("PayPal Order Error:", error);
-              setMessage(
-                `Could not initiate PayPal Checkout: ${error.message}`,
-              );
+              setMessage(`Could not initiate PayPal Checkout: ${error}`);
             }
           }}
           onApprove={async (data, actions) => {
@@ -120,10 +120,10 @@ const PayPalComponent: React.FC<{ shippingInfo: any }> = ({ shippingInfo }) => {
                   shippingInfo, // Pass shipping info to order complete page
                 },
               });
-            } catch (error: any) {
+            } catch (error) {
               console.error("PayPal Capture Error:", error);
               setMessage(
-                `Sorry, your transaction could not be processed: ${error.message}`,
+                `Sorry, your transaction could not be processed: ${error}`,
               );
             }
           }}

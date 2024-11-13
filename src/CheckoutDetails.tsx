@@ -10,7 +10,6 @@ interface CheckoutDetailsProps {
 
 const CheckoutDetails: React.FC<CheckoutDetailsProps> = ({
   handleEditShipping,
-  shippingInfo,
 }) => {
   return (
     <div className="mt-10 flex flex-col items-center gap-7 justify-center">
@@ -18,7 +17,7 @@ const CheckoutDetails: React.FC<CheckoutDetailsProps> = ({
         <ShippingReview handleEditShipping={handleEditShipping} />
       </div>
       <div className="md:w-[750px] w-full">
-        <PayPalComponent shippingInfo={shippingInfo} />
+        <PayPalComponent />
       </div>
     </div>
   );
