@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
-import { useCart } from "./CartContext"; // Assuming you have a cart context
+import { useCart } from "./CartContext";
 import { useNavigate } from "react-router-dom";
 import LoadingBackend from "./LoadingBackend";
 
@@ -12,7 +12,7 @@ const Message: React.FC<MessageProps> = ({ content }) => {
   return <p>{content}</p>;
 };
 
-const PayPalComponent: React.FC<{ shippingInfo: any }> = ({ shippingInfo }) => {
+const PayPalComponent: React.FC<{ shippingInfo }> = ({ shippingInfo }) => {
   const { items, setItems, isServerAwake, wakeUpBackend } = useCart();
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
@@ -31,7 +31,7 @@ const PayPalComponent: React.FC<{ shippingInfo: any }> = ({ shippingInfo }) => {
   };
   useEffect(() => {
     wakeUpBackend();
-  }, [isServerAwake]);
+  }, [isServerAwake, wakeUpBackend]);
   if (!isServerAwake) {
     return <LoadingBackend />;
   }
@@ -47,18 +47,41 @@ const PayPalComponent: React.FC<{ shippingInfo: any }> = ({ shippingInfo }) => {
           }}
           createOrder={async () => {
             try {
+              // Ensure the `id` field is included in the cart items
+              const cartItems = items.map(
+                ({
+                  id,
+                  name,
+                  unitAmount,
+                  quantity,
+                  selectedOptions,
+                  ...rest
+                }) => ({
+                  id,
+                  name,
+                  unitAmount,
+                  quantity,
+                  selectedOptions,
+                  ...rest,
+                }),
+              );
+
               const response = await fetch(`${apiBaseUrl}/api/orders`, {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                  cart: items,
+                  cart: cartItems,
                 }),
               });
+              console.log(cartItems); // Verify cart items structure
 
-              const orderData = JSON.parse(await response.json());
-
+              const data = await response.json();
+              if (data.error) {
+                throw new Error(data.error);
+              }
+              const orderData = JSON.parse(data);
               if (orderData.id) {
                 return orderData.id;
               } else {
@@ -68,11 +91,9 @@ const PayPalComponent: React.FC<{ shippingInfo: any }> = ({ shippingInfo }) => {
                   : "Unexpected error occurred";
                 throw new Error(errorMessage);
               }
-            } catch (error: any) {
+            } catch (error) {
               console.error("PayPal Order Error:", error);
-              setMessage(
-                `Could not initiate PayPal Checkout: ${error.message}`,
-              );
+              setMessage(`Could not initiate PayPal Checkout: ${error}`);
             }
           }}
           onApprove={async (data, actions) => {
@@ -108,22 +129,20 @@ const PayPalComponent: React.FC<{ shippingInfo: any }> = ({ shippingInfo }) => {
                 0,
               );
 
-              // Clear the cart
               setItems([]);
 
-              // Redirect to the Order Complete page with order details
               navigate("/order-complete", {
                 state: {
                   items,
                   orderId,
                   totalAmount,
-                  shippingInfo, // Pass shipping info to order complete page
+                  shippingInfo,
                 },
               });
-            } catch (error: any) {
+            } catch (error) {
               console.error("PayPal Capture Error:", error);
               setMessage(
-                `Sorry, your transaction could not be processed: ${error.message}`,
+                `Sorry, your transaction could not be processed: ${error}`,
               );
             }
           }}
