@@ -59,7 +59,7 @@ const Navbar: React.FC = () => {
                 </svg>
               </button>
             )}
-            <div className="lg:flex lg:items-center lg:w-auto w-full md:w-[50%] h-full lg:bg-transparent bg-pink-500 lg:p-0 p-8">
+            <div className="lg:flex lg:items-center lg:w-auto w-full md:w-[50%] mr-5 h-full lg:bg-transparent bg-pink-500 lg:p-0 p-8">
               <Link
                 to="/#products"
                 className="block lg:inline-block text-black px-3 py-2 rounded text-lg font-medium"
@@ -67,20 +67,20 @@ const Navbar: React.FC = () => {
               >
                 Products
               </Link>
-              <Link
+              {/* <Link
                 to="/about"
                 className="block lg:inline-block text-black px-3 py-2 rounded text-lg font-medium"
                 onClick={toggleMenu}
               >
                 About Us
-              </Link>
-              <Link
+              </Link> */}
+              {/* <Link
                 to="/contact"
                 className="block lg:inline-block text-black px-3 py-2 rounded mr-3 text-lg font-medium"
                 onClick={toggleMenu}
               >
                 Contact
-              </Link>
+              </Link> */}
             </div>
           </div>
 
