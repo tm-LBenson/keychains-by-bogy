@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import logo from "/logo.webp"; // Ensure the correct path to your logo
 import Cart from "./Cart";
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
-
+  const location = useLocation();
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
@@ -97,9 +97,11 @@ const Navbar: React.FC = () => {
             </svg>
           </button>
         </div>
-        <span className="text-black mt-1 mr-8">
-          <Cart setToggleCart={toggleCart} />
-        </span>
+        {location.pathname !== "/checkout" && (
+          <span className="text-black mt-1 mr-8">
+            <Cart setToggleCart={toggleCart} />
+          </span>
+        )}
       </div>
     </div>
   );
