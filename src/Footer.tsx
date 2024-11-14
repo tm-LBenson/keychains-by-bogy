@@ -12,7 +12,7 @@ const Footer: React.FC = () => {
               Your source for stylish self-defense products and apparel.
             </p>
           </div>
-          <div className="flex flex-col md:flex-row items-center gap-4">
+          {/* <div className="flex flex-col md:flex-row items-center gap-4">
             <Link
               to="/#products"
               className="hover:underline"
@@ -31,7 +31,7 @@ const Footer: React.FC = () => {
             >
               Contact
             </Link>
-          </div>
+          </div> */}
           <div className="mt-4 md:mt-0 text-center">
             <p className="text-sm">Follow us on:</p>
             <div className="flex justify-center gap-4 mt-2">
