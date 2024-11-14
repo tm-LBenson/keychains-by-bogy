@@ -21,8 +21,8 @@ const CartSummary: React.FC<CartSummaryProps> = ({ cartItems }) => {
             className="flex flex-col py-2 border-b last:border-none"
           >
             <div className="flex justify-between">
-              <span>
-                {item.name} x {item.quantity}
+              <span className="mr-5">
+                {item.name} x{item.quantity}
               </span>
               <span>
                 ${(+item.unitAmount.value * item.quantity).toFixed(2)}
