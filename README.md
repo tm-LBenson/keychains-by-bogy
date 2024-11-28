@@ -1,50 +1,114 @@
-# React + TypeScript + Vite
+# Keychains By Bogy LLC - E-commerce Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Welcome to the Keychains By Bogy LLC e-commerce platform! This website allows customers to browse and purchase a variety of keychains and accessories directly from our store.
 
-Currently, two official plugins are available:
+## Table of Contents
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [About the Project](#about-the-project)
+- [Features](#features)
+- [Built With](#built-with)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Usage](#usage)
+- [License](#license)
+- [Contact](#contact)
 
-## Expanding the ESLint configuration
+## About the Project
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+This e-commerce website is designed to provide a seamless shopping experience for customers looking to purchase unique keychains and related products. The platform is built with modern web technologies to ensure fast performance and secure transactions.
 
-- Configure the top-level `parserOptions` property like this:
+## Features
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+- **Product Catalog**: Browse products stored in Firestore, complete with images and descriptions.
+- **Dynamic Carousel**: Homepage features a carousel with images that can be updated via the admin site.
+- **Secure Payments**: Integrated with PayPal for secure and reliable payment processing.
+- **Data Integrity**: Backend server validates data against the database before finalizing transactions.
+- **Responsive Design**: Optimized for viewing on desktops, tablets, and mobile devices.
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## Built With
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+- **Frontend**:
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+  - [Vite](https://vitejs.dev/)
+  - HTML5, CSS3, JavaScript (ES6+)
+
+- **Backend**:
+
+  - [Express.js](https://expressjs.com/)
+  - [Node.js](https://nodejs.org/)
+
+- **Database**:
+
+  - [Firestore](https://firebase.google.com/docs/firestore)
+
+- **Storage**:
+
+  - [Amazon S3](https://aws.amazon.com/s3/) for hosting images
+
+- **Payment Integration**:
+  - [PayPal API](https://developer.paypal.com/)
+
+## Getting Started
+
+To set up the project locally, follow these steps.
+
+### Prerequisites
+
+- **Node.js** and **npm** installed on your machine.
+- Accounts and credentials for Firebase, AWS S3, and PayPal.
+
+### Installation
+
+1. **Clone the Repository**
+
+   ```bash
+   git clone https://github.com/tm-LBenson/keychains-by-bogy.git
+   cd keychains-by-bogy
+   ```
+
+2. **Install Dependencies**
+
+   ```bash
+   npm install
+   ```
+
+3. **Set Up Environment Variables**
+
+   Create a `.env` file in the root directory and add the following:
+
+   ```env
+   VITE_APP_API_BASE_URL=
+   VITE_APP_PAYPAL_CLIENT_ID=
+   VITE_GOOGLE_API_KEY=
+   ```
+
+4. **Run the Application**
+
+   ```bash
+   npm run dev
+   ```
+
+   The website should now be running at `http://localhost:3000`.
+
+## Usage
+
+- **Access the Site**: Open `http://localhost:3000` in your web browser.
+- **Browse Products**: View the catalog of keychains and add items to your cart.
+- **Dynamic Carousel**: Enjoy the homepage carousel showcasing featured products.
+- **Checkout Process**: Use PayPal for secure payment processing.
+- **Data Validation**: The server ensures all transaction data is valid before completion.
+
+## License
+
+This project is provided as-is without any warranty. While contributions and collaborations are not accepted, you are welcome to use the code as a template for your own projects.
+
+## Contact
+
+For questions or further information:
+
+- **Company**: Keychains By Bogy LLC
+
+---
+
+Thank you for your interest in Keychains By Bogy LLC!
