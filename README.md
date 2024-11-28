@@ -12,7 +12,6 @@ Welcome to the Keychains By Bogy LLC e-commerce platform! This website allows cu
   - [Installation](#installation)
 - [Usage](#usage)
 - [License](#license)
-- [Contact](#contact)
 
 ## About the Project
 
@@ -103,12 +102,5 @@ To set up the project locally, follow these steps.
 
 This project is provided as-is without any warranty. While contributions and collaborations are not accepted, you are welcome to use the code as a template for your own projects.
 
-## Contact
-
-For questions or further information:
-
-- **Company**: Keychains By Bogy LLC
-
----
 
 Thank you for your interest in Keychains By Bogy LLC!
